@@ -6,7 +6,7 @@
 2. Open Eclipse > File > Import > Maven/Existing Maven Projects
 3. Right click "team-09" > Run as > Maven Build. 
 4. In the "Goal", type `clean compile install` > Apply > Run
-5. Double click "COSC322Test" > Error message > Right click > Run as > Run configurations > Arguments.
+5. Right click "COSC322Test" > Run as > Java application > Error message > Right click again > Run as > Run configurations > Arguments.
 6. In the "Program Arguments" > type `team09 123` -> Apply -> Run
 7. Done
 
