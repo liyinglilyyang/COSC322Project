@@ -2,7 +2,7 @@
 
 ## Install & Configuration
 
-1. Clone(Download) the repo to your local path. 
+1. Clone(Download) the repo to your local path, unzip the file. 
 2. Open Eclipse > File > Import > Maven/Existing Maven Projects
 3. Right click "team-09" > Run as > Maven Build. 
 4. In the "Goal", type `clean compile install` > Apply > Run
