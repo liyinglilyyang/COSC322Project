@@ -26,16 +26,20 @@ public class COSC322Test extends GamePlayer{
 	
     private String userName = null;
     private String passwd = null;
- 
+    
+    
+    // test var
+	public String playerType = null;
+	
 	
     /**
      * The main method
      * @param args for name and passwd (current, any string would work)
      */
     public static void main(String[] args) {				 
-    	//COSC322Test player = new COSC322Test(args[0], args[1]);
+    	COSC322Test player = new COSC322Test(args[0], args[1]);
     	//team09Player player = new team09Player(args[0], args[1]);
-    	HumanPlayer player = new HumanPlayer();
+    	//HumanPlayer player = new HumanPlayer();
     	
     	if(player.getGameGUI() == null) {
     		player.Go();
@@ -48,6 +52,8 @@ public class COSC322Test extends GamePlayer{
                 }
             });
     	}
+    	
+    	// 
     }
 	
     /**
@@ -69,10 +75,8 @@ public class COSC322Test extends GamePlayer{
 
     @Override
     public void onLogin() {
-    	System.out.println("Congratualations!!! "
-    			+ "I am called because the server indicated that the login is successfully");
-    	System.out.println("The next step is to find a room and join it: "
-    			+ "the gameClient instance created in my constructor knows how!"); 
+    	System.out.println("Congratualations!!! Login successfully");
+    	
     	/*
     	 *  Warm-up Demo 1 
     	List<Room> roomlist = this.gameClient.getRoomList();
@@ -104,12 +108,22 @@ public class COSC322Test extends GamePlayer{
     	System.out.println("Received msg:" + msgDetails);
     	*/
     	
+    	
+    	System.out.println("To test this method is running");
+    	System.out.println("state_board");
+    	System.out.println("action_move" + msgDetails.get(AmazonsGameMessage.PLAYER_BLACK));
+    	System.out.println("action_move" + msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR));
     	//GameMessage.GAME_STATE_BOARD
     	if (messageType == GameMessage.GAME_STATE_BOARD) {
     		this.gamegui.setGameState((ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE));
+    		
     	}else if (messageType == GameMessage.GAME_ACTION_MOVE){
     	//GameMessage.GAME_ACTION_MOVE
     		this.gamegui.updateGameState(msgDetails);
+    		
+    	}else if (messageType == GameMessage.GAME_ACTION_START) {
+    		this.gamegui.updateGameState(msgDetails);
+    		
     	}
     	
     	return true;   	
@@ -118,7 +132,7 @@ public class COSC322Test extends GamePlayer{
     
     @Override
     public String userName() {
-    	return userName;
+    	return this.userName;
     }
 
 	@Override
@@ -138,6 +152,7 @@ public class COSC322Test extends GamePlayer{
 		// TODO Auto-generated method stub
     	gameClient = new GameClient(userName, passwd, this);			
 	}
-
+	
+	// testing fun for getting and send move message
  
 }//end of class

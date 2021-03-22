@@ -9,16 +9,17 @@ public class Coor {
 		this.y = y;
 	}
 	
-	// Getter
+	// Getter 
+	// return an array storing x, y 
 	public int[] getCoor() {
 		int[] coor = {this.x, this.y};
 		return coor;
 	}
 	
 	// Setter
-	public void setCoor(int[] coor) {
-		this.x = coor[0];
-		this.y = coor[1];
+	public void setCoor(Coor coor) {
+		this.x = coor.getCoor()[0];
+		this.y = coor.getCoor()[1];
 	}
 	
 	public void setCoor(int x, int y) {

@@ -6,6 +6,10 @@ public class Action {
 	//positions are represented by arraylists;
 	
 	// Constructor
+	public Action(){
+		
+	}
+	
 	public Action(Coor Original_Position, Coor New_Position){
 		this.Original_Position = Original_Position;
 		this.New_Position = New_Position;
@@ -18,8 +22,8 @@ public class Action {
 	
 	// Getter
 	// return a 2d array for original_pos and new_pos
-	public int[][] getAction(){
-		int[][] action = {this.Original_Position.getCoor(), this.New_Position.getCoor()};
+	public Coor[] getAction(){
+		Coor[] action = {this.Original_Position, this.New_Position};
 		return action;
 	}
 	
@@ -27,7 +31,7 @@ public class Action {
 		return this.Original_Position.getCoor();
 	}
 	
-	public int[] getNew_Position_Position() {
+	public int[] getNew_Position() {
 		return this.New_Position.getCoor();
 	}
 	
