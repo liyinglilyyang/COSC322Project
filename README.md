@@ -13,3 +13,6 @@
 
 ## API
 [API Documentation](https://people.ok.ubc.ca/yongg/teaching/cosc322/project-and-assignments/cosc322-game-client-2.1/game-client-api-2021/)
+
+## Development Doc
+[Link](https://docs.google.com/document/d/1nOffm7EFmxFzYwt0hMHgNOtJa8PuGcLhAdmcSDMxwfA/edit?usp=sharing)
