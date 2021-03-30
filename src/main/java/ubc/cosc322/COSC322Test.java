@@ -248,6 +248,7 @@ public class COSC322Test extends GamePlayer{
 		ArrayList<Action> allActions = new ArrayList<Action>();
 		for(Coor queen: queens)
 			allActions.addAll(getActions(s,queen));
+		System.out.println("***********The number of random actions we have is: "+ allActions.size());
 		int i = (int)(allActions.size()*Math.random());
 		Action randomAction = allActions.get(i);
 		// Coor ap = new Coor(randomAction.getOr().getX(),randomAction.getOr().getY(),'A');
@@ -345,9 +346,12 @@ public class COSC322Test extends GamePlayer{
 		ArrayList<Action> actions = new ArrayList<Action>();
 		//for all directions
 		//while a step is available, go into it
+		System.out.println("We are now printing one instance of a one queen map");
+		System.out.println(oneQueenMap);
+
 		for(int di = 0; di < 8; di++){
 			int step = 1;
-			while(hasValidAction(queen,step,di)){
+			while(hasValidAction(queen,step,di,oneQueenMap)){
 				actions.add(new Action(queen,step,di));
 				step++;
 			}
