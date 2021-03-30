@@ -2,10 +2,9 @@
 package ubc.cosc322;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,26 +30,26 @@ public class COSC322Test extends GamePlayer{
     private String userName = null;
     private String passwd = null;
     
-    
-    // test var
-    
+
+    // implemented Var
     // playerType
 	public char playerType = 'B';
 	
 	// set State
 	// private State s = new State();
 	private NewState s = new NewState();
-	
-	// arrowBoard
-	// private ArrayList<Coor> arrowBoard = new ArrayList<Coor>(); 
-	
+
 	// actionlist 
-	// private int[][] actionList = {{-1, 0}, {-1, -1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, 0}};
 	private int[][] actionList ={{-1, 0},{-1, -1},{-1, 1},{0, -1},{0, 1},{1, 0},{1, -1},{1, 1}};	
+	
 	// counter for steps
-	private int counter = 0;
+	private int counter = 1;
+	
+	// gameBoard
 	ArrayList<Integer> currentGameBoard = new ArrayList<Integer>();
 	
+	// utility
+	int utility = 0;
 	
     /**
      * The main method
@@ -134,6 +133,9 @@ public class COSC322Test extends GamePlayer{
 				System.out.println("Test Eme Move");
         		this.makeEmerMove(this.playerType);
         		System.out.println("We are black queens");
+        		
+        		//calMinDis(this.s.getState(playerType), this.playerType, this.counter);
+        		System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
         		// this.counter++;
         	}else if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_WHITE))){
         		this.playerType = 'W';
@@ -146,7 +148,7 @@ public class COSC322Test extends GamePlayer{
     	}else if (messageType.equals(GameMessage.GAME_ACTION_MOVE)){
     		// this.gamegui.updateGameState(msgDetails);
     		ArrayList <Integer> QueenOri = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_CURR));
-    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_NEXT));
+    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.Queen_POS_NEXT));
     		ArrayList <Integer> arrowNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.ARROW_POS));
     		gamegui.updateGameState(QueenOri,QueenNew,arrowNew);
 
@@ -161,6 +163,9 @@ public class COSC322Test extends GamePlayer{
     		// update state and arrowboard
     		this.s.updateState(Ori_Position, New_Position);
     		this.s.setCoor(Arrow_Position);
+    		
+    		calMinDis(this.s.getState(playerType), this.playerType, this.counter);
+    		System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
     		makeEmerMove(playerType);
@@ -218,9 +223,10 @@ public class COSC322Test extends GamePlayer{
 	
 	
 	// make decision and send move message
-	public void makeMove(String playerType) {
-
-		//this.gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);
+	public void makeMove(char playerType) {
+		// minimax = alphaBetaSearch();
+		
+		// makeAction();
 	}
 	
 	
@@ -228,11 +234,7 @@ public class COSC322Test extends GamePlayer{
 	public void makeEmerMove(char playerType) {
 		
 		ArrayList<Coor> queens = s.getState(playerType);
-		Random rand=new Random(47);
-		Collections.shuffle(queens,rand);
 		for(Coor currentQueen : queens){//the first queen
-			//we have found a queen
-			//we would like to indentify the node with max utility
 			for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
 				int testStep = 1;//we always try step one
 				//notice that if 1 is impossible, then we do not need to proceed either
@@ -247,16 +249,136 @@ public class COSC322Test extends GamePlayer{
 			}
 		}
 	}
+	
 
+	
+	// calculate min-distance  function
+	public void calMinDis(ArrayList<Coor> queens, char playerType, int step) {
+		if(step == 1) {//start with four queens we have on board
+			queens = s.getState(playerType);
+		}
+			
+		for(Coor currentQueen : queens) {
+			for(int testDirection = 0; testDirection<7; testDirection++){//for each direction at each step
+				ArrayList<Coor> tmpQueue = new ArrayList<Coor>();// crate a tmp array for storing step ith movable tile at one direction
+				int count = 1;
+				while (hasValidAction(currentQueen, count, testDirection)){//same direction, go as far as possible by increasing count
+					int[] currentAction = actionList[testDirection];//store each blank tile with steps value
+					int targetX = currentQueen.getX()+currentAction[0];
+					int targetY = currentQueen.getY()+currentAction[1];
+					Coor targetQueen = new Coor(targetX, targetY);
+					tmpQueue.add(targetQueen);//used for recursive call go further step
+						
+					if (playerType == 'B' && step<targetQueen.getBlackDis()) {//only update for a shorter distance
+						targetQueen.setBlackDis(step);
+					}else if(playerType == 'W' && step<targetQueen.getWhiteDis()) {
+						targetQueen.setWhiteDis(step);
+					}
+					count++;	
+				}
+				calMinDis(tmpQueue, playerType, step++);
+					
+			}
+		}
+			
+	}
+//	// calculate min-distance
+//	public void calMinDis(char playerType) {
+//		ArrayList<Coor> queens = s.getState(playerType);
+//		for(Coor currentQueen : queens){//iterate through each queen
+//			
+//			helper_calMinDis(currentQueen, playerType);//call the recursive helper function	
+//			this.counter = 0;//reset the global counter(step number) to 0
+//		}
+//	}
+	
+	// calculate min-distance helper function
+//	public void helper_calMinDis(ArrayList<Coor> queens, char playerType, int step) {
+//		for(Coor currentQueen : queens) {
+//			while(!isVisitedAll(currentQueen)) {//while current queen still has neighbors 
+//				for(int testDirection = 0; testDirection<7; testDirection++){//for each direction at each step
+//					ArrayList<Coor> tmpQueue = new ArrayList<Coor>();// crate a tmp array for storing step ith movable tile at one direciton
+//					
+//					if (hasValidAction(currentQueen, this.counter, testDirection)){
+//						int[] currentAction = actionList[testDirection];//store each blank tile with steps value
+//						int targetX = currentQueen.getX()+currentAction[0];
+//						int targetY = currentQueen.getY()+currentAction[1];
+//						Coor targetQueen = new Coor(targetX, targetY);
+//						
+//						if (playerType == 'B') {//update step value 
+//							targetQueen.setBlackDis(counter);
+//						}else if(playerType == 'W') {
+//							targetQueen.setWhiteDis(counter);
+//						}
+//						
+//						tmpQueue.add(targetQueen);
+//						//helper_calMinDis(targetQueen, playerType);//recursive call
+//					}else {
+////						queens.remove(currentQueen);//remove the queen from the queue
+////						helper_helper_calMinDis
+//					}
+//					
+//				}
+//			}
+//		}
+//		
+//	}
+	
+	//showing MinDis board (debug usage)
+	 public String showMinDisBoard(Coor[][] gameBoard, char playerType){
+	        String r = "";
+	        for(int yi = 10; yi >=1; yi--){
+	            for(int xi = 1; xi <=10; xi++){
+	                if(playerType == 'B') {
+	                	r += gameBoard[xi][yi].getBlackDis() + ", ";  
+	                }else if (playerType == 'W') {
+	                	r += gameBoard[xi][yi].getWhiteDis() + ", "; 
+	                }
+	            }
+	            r+="\n";
+	        }
+	        return r;
+	                
+	 }
+	
+	// calculate heuristic value
+	public void calHeuristic(NewState s, char playerType) {
+		ArrayList<Coor> availableCoor = s.getAvailableCoordinates();//get all available tiles
+		
+		for (Coor co: availableCoor) {
+			if (co.getBlackDis() < co.getWhiteDis()) {//if blackDis < whiteDis and we are black, utility +1
+				utility = playerType == 'B' ? utility+1 : utility-1;
+			}else if (co.getBlackDis() > co.getWhiteDis()) {//else, otherwise
+				utility = playerType == 'B' ? utility-1 : utility+1;
+			}
+		}
+	}
+		
+	
+	
+	// test if we have visited all neibor at currentLocation
+	public boolean isVisitedAll(Coor currentLocation) {
+		boolean isVisited = false;
+		for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
+			if(hasValidAction(currentLocation,1,testDirection)){
+				//System.out.println("****This tile still has neighbors");//(debug usage)
+				isVisited = false;
+			}else {
+				isVisited = true;
+			}
+				
+		}
+		return isVisited;
+	}
+	
+	// move function, will only move one tile at valid direction (legacy) 
 	public boolean makeAction(Coor ori, int step, int direction){
 		//notice that we always shoot to where we started
 		if(hasValidAction(ori,step,direction)){
 			int[] currentAction = actionList[direction];
 			Coor op = ori;
 			Coor np = s.getCoor(ori.getX()+currentAction[0],ori.getY()+currentAction[1]);
-			
-			Coor ap = new Coor(op.getX(),op.getY(),'A');
-			// Coor ap = shootBestArrow(op, np);
+			Coor ap = new Coor(op.getX(),op.getY(),'A');// always shoot to ori, for test purpose
 			updateAction(op,np,ap);
 			return true;
 		}else
@@ -265,63 +387,22 @@ public class COSC322Test extends GamePlayer{
 		// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
 	}
 
-	public Coor shootBestArrow(Coor ori, Coor fin){
-		int[][] aL ={{-1, 0},{-1, -1},{-1, 1},{0, -1},{0, 1},{1, 0},{1, -1},{1, 1}};	
-        ArrayList<Coor> queue = new ArrayList<Coor>();
-        queue.add(fin);
-        // int step = level;
-        int level = 1;
-
-		Coor currentCoor = queue.remove(0);
-		for(int dc = 0; dc<8; dc++){//eight directions
-			int[] currentAction = aL[dc];
-			int xc = currentCoor.getX()+currentAction[0];
-			int yc = currentCoor.getY()+currentAction[1];//get new position
-			Coor current = s.getState()[xc][yc];
-			while(CoorValid(xc,yc) && current.getType()=='N'){
-				if(current.getIndex()>level){//then we want to update it
-					current.setIndex(level);
-					queue.add(current);
-				}
-				xc += currentAction[0];
-				yc += currentAction[1];
-			}
-		} 
-
-		Coor best = new Coor(queue.get(0).getX(),queue.get(0).getY(),'A');
-		int bestU = Integer.MIN_VALUE;
-		
-		Coor current = best;
-		for(Coor i : queue){
-			current = new Coor(i.getX(),i.getY(),'A');
-			s.setCoor(current);
-			if(bestU <MDE()){
-				bestU = MDE();
-				best = new Coor(current.getX(),current.getY(),'A');
-			}
-				
-
-			current.setType('N');
-			s.setCoor(current);
-		}
-
-		return current;
-	}
-
+	//int[][] actionList = {{-1, 0}, {-1, -1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};	
+	// test whether given queen has valid move
 	public boolean hasValidAction(Coor ori, int step, int direction){
 		int[] currentAction = actionList[direction];
-		int targetX = ori.getX()+currentAction[0];
-		int targetY = ori.getY()+currentAction[1];
+		int targetX = ori.getX()+currentAction[0]*step;
+		int targetY = ori.getY()+currentAction[1]*step;
 		return isCoorValid(new Coor(targetX,targetY)) && s.getType(targetX,targetY) == 'N';
 		// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
 	}
-	// test whether the move is valid
+	
+	// test whether the move is valid (Legacy)
 	public boolean isCoorValid(Coor np){
 		return (np.getX()<=10)&&(np.getX()>=1)&&(np.getY()<=10)&&(np.getY()>=1);
 	}
-	public boolean CoorValid(int xc, int yc){//np is intended to be the ori
-		return (xc<=10)&&(xc>=1)&&(yc<=10)&&(yc>=1);
-    }
+
+	// send move msg to server
 	public void updateAction(Coor op, Coor np, Coor ap){
 		System.out.println("We are now updating actions");
 		//we update state object information
@@ -333,40 +414,17 @@ public class COSC322Test extends GamePlayer{
 		ArrayList <Integer> moveQueenNew = new ArrayList <Integer>();//{{np.getX();np.getY();}}
 		ArrayList <Integer> movearrowNew = new ArrayList <Integer>();//{{ap.getX();ap.getY();}}
 
-		// s.MinDisMap(np);//calculate min dis map originating at arrow position
-		s.MDALL('B');
-		System.out.println(s.toMD());//print mid dis map
-		s.resetMD();
-		s.MDALL('W');
-		System.out.println(s.toMD());//print mid dis map
-		s.resetMD();
-		System.out.println(MDE());
+		//update y
 		moveQueenOri.add(op.getY());
 		moveQueenNew.add(np.getY());
 		movearrowNew.add(ap.getY());
+		//update x
 		moveQueenOri.add(op.getX());
 		moveQueenNew.add(np.getX());
 		movearrowNew.add(ap.getX());
+		
 		gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
 		getGameGUI().updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
-	}
-	public int MDE(){
-		s.MDALL('W');
-		int[][] rW = s.toMDArry();
-		s.resetMD();
-		s.MDALL('B');
-		int[][] rB = s.toMDArry();
-		s.resetMD();
-		int utility = 0;
-		for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-                if(rW[xi][yi]>rB[xi][yi])
-					utility = playerType == 'B' ? utility+1 : utility -1;
-				else if(rW[xi][yi]<rB[xi][yi])
-					utility = playerType == 'B' ? utility-1 : utility +1;
-            }
-        }
-		return utility;
 	}
  
 }//end of class
