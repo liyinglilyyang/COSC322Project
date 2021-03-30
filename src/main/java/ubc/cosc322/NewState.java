@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ygraph.ai.smartfox.games.Amazon.GameBoard;
 
-public class NewState {
+public class NewState implements Cloneable{
 	// game state
 	Coor[][] gameBoard = new Coor[11][11];
 	// by the nature of this game, we manually created the state for the game 

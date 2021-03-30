@@ -90,8 +90,6 @@ public class COSC322Test extends GamePlayer{
     	
     }
  
-
-
     @Override
     public void onLogin() {
     	System.out.println("Congratualations!!! Login successfully");
@@ -148,7 +146,7 @@ public class COSC322Test extends GamePlayer{
     	}else if (messageType.equals(GameMessage.GAME_ACTION_MOVE)){
     		// this.gamegui.updateGameState(msgDetails);
     		ArrayList <Integer> QueenOri = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_CURR));
-    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.Queen_POS_NEXT));
+    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_NEXT));
     		ArrayList <Integer> arrowNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.ARROW_POS));
     		gamegui.updateGameState(QueenOri,QueenNew,arrowNew);
 
@@ -164,7 +162,7 @@ public class COSC322Test extends GamePlayer{
     		this.s.updateState(Ori_Position, New_Position);
     		this.s.setCoor(Arrow_Position);
     		
-    		calMinDis(this.s.getState(playerType), this.playerType, this.counter);
+    		// calMinDis(this.s.getState(playerType), this.playerType, this.counter);
     		System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
@@ -250,7 +248,14 @@ public class COSC322Test extends GamePlayer{
 		}
 	}
 	
-
+	public int findUtility(NewState suggestedGameBoard){
+		
+		int utility = 0;
+		//for each corrdinate on the board
+		//if it is a valid coor && belongs to a queen (which requires another for each loop to find out)
+			//we either increment or decrement utility;
+		return utility;
+	}
 	
 	// calculate min-distance  function
 	public void calMinDis(ArrayList<Coor> queens, char playerType, int step) {
@@ -353,7 +358,6 @@ public class COSC322Test extends GamePlayer{
 			}
 		}
 	}
-		
 	
 	
 	// test if we have visited all neibor at currentLocation
