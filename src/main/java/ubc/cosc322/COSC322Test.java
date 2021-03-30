@@ -148,7 +148,7 @@ public class COSC322Test extends GamePlayer{
     	}else if (messageType.equals(GameMessage.GAME_ACTION_MOVE)){
     		// this.gamegui.updateGameState(msgDetails);
     		ArrayList <Integer> QueenOri = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_CURR));
-    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.Queen_POS_NEXT));
+    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_NEXT));
     		ArrayList <Integer> arrowNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.ARROW_POS));
     		gamegui.updateGameState(QueenOri,QueenNew,arrowNew);
 
@@ -268,6 +268,17 @@ public class COSC322Test extends GamePlayer{
 		//for each corrdinate on the board
 		//if it is a valid coor && belongs to a queen (which requires another for each loop to find out)
 			//we either increment or decrement utility;
+		
+		for(int yi = 10; yi >=1; yi--){
+            for(int xi = 1; xi <=10; xi++){
+            }
+        }
+		for(Coor c: suggestedGameBoard.getState('N')){
+			//Now all the c is a valid Coor
+			for()
+		}
+
+
 		return utility;
 	}
 	
