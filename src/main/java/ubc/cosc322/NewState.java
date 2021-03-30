@@ -38,12 +38,15 @@ public class NewState {
 	
 	// setter
     public void setCoor(Coor coor){//intended to be used to set new positions of arrows *NOT for setting Amazons
-        if(coor.getType()!='A'){//print error message
+        if(coor.getType()!='A' || coor.getType()!='N' ){//print error message
             System.out.println("Warning! Unexpected setting method occured at position " + coor.getX()+","+coor.getY());
         }
-        
         gameBoard[coor.getX()][coor.getY()].setCoor(coor);
         
+    }
+
+    public void setCoorIndex(Coor coor, int index){
+        gameBoard[coor.getX()][coor.getY()].setIndex(index);
     }
     
     // update state

@@ -21,6 +21,12 @@ public class Coor {
 		this(x,y,'N');
 	}
 
+	public Coor(int x, int y, int index){
+		this.x = x;
+		this.y = y;
+		this.index = index;
+	}
+
 	public Coor() {
 		this(0,0,'N');
 	}
@@ -73,7 +79,7 @@ public class Coor {
 	public int getIndex(){
 		return index;
 	}
-	
+
 	public int getX(){
 		return x;
 	}

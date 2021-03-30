@@ -279,12 +279,54 @@ public class COSC322Test extends GamePlayer{
 
 	public NewState[] getMdMap(NewState suggestedGameBoard){
 		NewState[] mdMap = new NewState[8];
-		for(NewState si : mdMap)
-			si = new NewState('N');
+		for(NewState si : mdMap){
+			si = new NewState('A');
+			for(Coor c: suggestedGameBoard.getState('N'))
+				si.setCoor(new Coor(c.getX(),c.getY(),-1));
+		}//Now mdMap contains 8 identical maps, and all available positions are N
+		int i = 0;
+		//black first, white second
+		for(Coor c: suggestedGameBoard.getState('B')){
+			assignMinDistance(mdMap[i],)
+			///////////////////////////////////////////////////////////////////
+		}
 		
 		return mdMap;
 	}
+
+	public void assignMinDistance(NewState oneQueenMap, Coor queen){
+		ArrayList<Coor> queue = new ArrayList<Coor>();
+		//this queue stores all the list of available neighbours
+		
+		for(Action a: getActions(oneQueenMap,queen)){
+			queue.add(a.getDe());
+			oneQueenMap.setCoorIndex(a.getDe(),1);
+		}
+		while(!queue.isEmpty()){
+			Coor currentNode = queue.remove(0);
+			for(Action a: getActions(oneQueenMap,currentNode)){
+				if(a.getDe().getIndex()==-1){//if we have not visit it before
+					queue.add(a.getDe());
+					oneQueenMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
+				}
+			}
+		}
+	}
 	
+	public ArrayList<Action> getActions(NewState oneQueenMap, Coor queen){
+		ArrayList<Action> actions = new ArrayList<Action>();
+		//for all directions
+		//while a step is available, go into it
+		for(int di = 0; di < 8; di++){
+			int step = 1;
+			while(hasValidAction(queen,step,di)){
+				actions.add(new Action(queen,step,di));
+				step++;
+			}
+		}
+		return actions;
+	}
+
 	// calculate min-distance  function
 	public void calMinDis(ArrayList<Coor> queens, char playerType, int step) {
 		if(step == 1) {//start with four queens we have on board
@@ -315,47 +357,6 @@ public class COSC322Test extends GamePlayer{
 		}
 			
 	}
-//	// calculate min-distance
-//	public void calMinDis(char playerType) {
-//		ArrayList<Coor> queens = s.getState(playerType);
-//		for(Coor currentQueen : queens){//iterate through each queen
-//			
-//			helper_calMinDis(currentQueen, playerType);//call the recursive helper function	
-//			this.counter = 0;//reset the global counter(step number) to 0
-//		}
-//	}
-	
-	// calculate min-distance helper function
-//	public void helper_calMinDis(ArrayList<Coor> queens, char playerType, int step) {
-//		for(Coor currentQueen : queens) {
-//			while(!isVisitedAll(currentQueen)) {//while current queen still has neighbors 
-//				for(int testDirection = 0; testDirection<7; testDirection++){//for each direction at each step
-//					ArrayList<Coor> tmpQueue = new ArrayList<Coor>();// crate a tmp array for storing step ith movable tile at one direciton
-//					
-//					if (hasValidAction(currentQueen, this.counter, testDirection)){
-//						int[] currentAction = actionList[testDirection];//store each blank tile with steps value
-//						int targetX = currentQueen.getX()+currentAction[0];
-//						int targetY = currentQueen.getY()+currentAction[1];
-//						Coor targetQueen = new Coor(targetX, targetY);
-//						
-//						if (playerType == 'B') {//update step value 
-//							targetQueen.setBlackDis(counter);
-//						}else if(playerType == 'W') {
-//							targetQueen.setWhiteDis(counter);
-//						}
-//						
-//						tmpQueue.add(targetQueen);
-//						//helper_calMinDis(targetQueen, playerType);//recursive call
-//					}else {
-////						queens.remove(currentQueen);//remove the queen from the queue
-////						helper_helper_calMinDis
-//					}
-//					
-//				}
-//			}
-//		}
-//		
-//	}
 	
 	//showing MinDis board (debug usage)
 	 public String showMinDisBoard(Coor[][] gameBoard, char playerType){
@@ -428,7 +429,14 @@ public class COSC322Test extends GamePlayer{
 		return isCoorValid(new Coor(targetX,targetY)) && s.getType(targetX,targetY) == 'N';
 		// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
 	}
-	
+
+	public boolean hasValidAction(Coor ori, int step, int direction, NewState suggestedGameMap){
+		int[] currentAction = actionList[direction];
+		int targetX = ori.getX()+currentAction[0]*step;
+		int targetY = ori.getY()+currentAction[1]*step;
+		return isCoorValid(new Coor(targetX,targetY)) && suggestedGameMap.getType(targetX,targetY) == 'N';
+	}
+
 	// test whether the move is valid (Legacy)
 	public boolean isCoorValid(Coor np){
 		return (np.getX()<=10)&&(np.getX()>=1)&&(np.getY()<=10)&&(np.getY()>=1);
