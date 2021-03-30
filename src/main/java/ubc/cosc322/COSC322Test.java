@@ -128,9 +128,9 @@ public class COSC322Test extends GamePlayer{
     		// ++this.counter;
     		if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
         		this.playerType = 'B';
-        		this.runTimeTask(this.playerType);
+        		// this.runTimeTask(this.playerType);
 				//System.out.println("Test Eme Move");
-        		//this.makeEmerMove(this.playerType);
+        		this.makeEmerMove(this.playerType);
         		System.out.println("We are black queens");
         		
         		//calMinDis(this.s.getState(playerType), this.playerType, this.counter);
@@ -167,8 +167,8 @@ public class COSC322Test extends GamePlayer{
     		// System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
-    		this.runTimeTask(this.playerType);
-    		//makeEmerMove(playerType);
+    		// this.runTimeTask(this.playerType);
+    		makeEmerMove(playerType);
     		
     	}
     	
@@ -223,11 +223,11 @@ public class COSC322Test extends GamePlayer{
 	    
 	}
 	
-	// test function to cancel the timer 
-	public void showmsg(Timer timer) {
-		System.out.println("timer is terminated.");
-		timer.cancel();
-	}
+	// // test function to cancel the timer 
+	// public void showmsg(Timer timer) {
+	// 	System.out.println("timer is terminated.");
+	// 	timer.cancel();
+	// }
 	
 	
 	
@@ -253,9 +253,13 @@ public class COSC322Test extends GamePlayer{
 		// Coor ap = new Coor(randomAction.getOr().getX(),randomAction.getOr().getY(),'A');
 		// // always shoot to ori, for test purpose
 		
-		ArrayList<Action> ArrowP = getActions(s,randomAction.getDe());
+		// ArrayList<Action> ArrowP = getActions(s,randomAction.getDe());
+		
+		ArrayList<Action> ArrowP = getActions(creatHypotheticalMap(s, randomAction),randomAction.getDe());
 		int j = (int)(ArrowP.size()*Math.random());
 		updateAction(randomAction.getOr(),randomAction.getDe(),ArrowP.get(j).getDe());
+		if(randomAction.getDe().equals(ArrowP.get(j).getOr()))
+			System.out.println("This is a valid arrow shooting action!");
 
 		// for(Coor currentQueen : queens){//the first queen
 		// 	for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
@@ -289,6 +293,16 @@ public class COSC322Test extends GamePlayer{
 
 
 		return utility;
+	}
+
+	public NewState creatHypotheticalMap(NewState oriMap, Action action){
+		NewState hm = new NewState('A');
+		for(Coor c: oriMap.getState('N')){
+			hm.setCoor(c);
+		}
+		hm.getCoor(action.getDe()).setType('A');//the destination ought to be covered
+		hm.getCoor(action.getOr()).setType('N');//the ori ought to be space
+		return hm;
 	}
 
 	public NewState[] getMdMap(NewState suggestedGameBoard){
@@ -461,7 +475,8 @@ public class COSC322Test extends GamePlayer{
 		System.out.println("We are now updating actions");
 		//we update state object information
 		s.updateState(op, np);//move Amazons to new position
-		s.setCoor(ap);//update Arrow on board
+		s.setCoor(ap,'A');//update Arrow on board
+
 		//now we prepare information to send to the server
 		System.out.println(s);//print state
 		ArrayList <Integer> moveQueenOri = new ArrayList <Integer>();//{{op.getX();op.getY();}}

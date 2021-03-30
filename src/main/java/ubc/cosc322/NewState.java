@@ -45,6 +45,10 @@ public class NewState {
         
     }
 
+    public void setCoor(Coor coor, char type){
+        gameBoard[coor.getX()][coor.getY()].setCoor(coor, type);
+    }
+
     public void setCoorIndex(Coor coor, int index){
         gameBoard[coor.getX()][coor.getY()].setIndex(index);
     }
@@ -87,6 +91,10 @@ public class NewState {
             return gameBoard[x][y];
         else
             return null;
+    }
+
+    public Coor getCoor(Coor c){
+        return getCoor(c.getX(), c.getY());
     }
 
     public char getType( int x,int y){

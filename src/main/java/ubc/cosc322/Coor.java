@@ -45,6 +45,11 @@ public class Coor {
 		this.y = y;
 	}
 	
+	public void setCoor(Coor coor, char type){
+		setCoor(coor.x, coor.y);
+		this.type = type;
+	}
+
 	public void setX(int x){
 		this.x = x;
 	}
