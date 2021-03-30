@@ -134,7 +134,7 @@ public class COSC322Test extends GamePlayer{
         		System.out.println("We are black queens");
         		
         		//calMinDis(this.s.getState(playerType), this.playerType, this.counter);
-        		System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
+        		// System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
         		// this.counter++;
         	}else if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_WHITE))){
         		this.playerType = 'W';
@@ -164,7 +164,7 @@ public class COSC322Test extends GamePlayer{
     		this.s.setCoor(Arrow_Position);
     		
     		// calMinDis(this.s.getState(playerType), this.playerType, this.counter);
-    		System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
+    		// System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
     		this.runTimeTask(this.playerType);
@@ -217,9 +217,9 @@ public class COSC322Test extends GamePlayer{
 	    
 		Timer timer = new Timer("Timer");
 	    
-	    long delay = 7000L;// second * 1000
+	    long delay = 1000L;// second * 1000
 	    timer.schedule(task, delay);
-	    showmsg(timer);// minimax goes here with one more para timer
+	    // showmsg(timer);// minimax goes here with one more para timer
 	    
 	}
 	
@@ -243,20 +243,34 @@ public class COSC322Test extends GamePlayer{
 	public void makeEmerMove(char playerType) {
 		
 		ArrayList<Coor> queens = s.getState(playerType);
-		for(Coor currentQueen : queens){//the first queen
-			for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
-				int testStep = 1;//we always try step one
-				//notice that if 1 is impossible, then we do not need to proceed either
-				if(makeAction(currentQueen,testStep,testDirection)){
-					System.out.println("****Player Type: " + playerType);
-					System.out.println("****CurrentObject: " + currentQueen.getX() + "," + currentQueen.getY() );
-					int[] currentD = actionList[testDirection];
-					System.out.println("****Test Direction"+ currentD.toString() +"****Test Step"+testStep);
-					return;
-				}
+		// Coor queen = queens.get((int)Math.random()*4);
+
+		ArrayList<Action> allActions = new ArrayList<Action>();
+		for(Coor queen: queens)
+			allActions.addAll(getActions(s,queen));
+		int i = (int)(allActions.size()*Math.random());
+		Action randomAction = allActions.get(i);
+		// Coor ap = new Coor(randomAction.getOr().getX(),randomAction.getOr().getY(),'A');
+		// // always shoot to ori, for test purpose
+		
+		ArrayList<Action> ArrowP = getActions(s,randomAction.getDe());
+		int j = (int)(ArrowP.size()*Math.random());
+		updateAction(randomAction.getOr(),randomAction.getDe(),ArrowP.get(j).getDe());
+
+		// for(Coor currentQueen : queens){//the first queen
+		// 	for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
+		// 		int testStep = 1;//we always try step one
+		// 		//notice that if 1 is impossible, then we do not need to proceed either
+		// 		if(makeAction(currentQueen,testStep,testDirection)){
+		// 			System.out.println("****Player Type: " + playerType);
+		// 			System.out.println("****CurrentObject: " + currentQueen.getX() + "," + currentQueen.getY() );
+		// 			int[] currentD = actionList[testDirection];
+		// 			System.out.println("****Test Direction"+ currentD.toString() +"****Test Step"+testStep);
+		// 			return;
+		// 		}
 					
-			}
-		}
+		// 	}
+		// }
 	}
 	
 	public int findUtility(NewState suggestedGameBoard){
@@ -287,7 +301,7 @@ public class COSC322Test extends GamePlayer{
 		int i = 0;
 		//black first, white second
 		for(Coor c: suggestedGameBoard.getState('B')){
-			assignMinDistance(mdMap[i],)
+			// assignMinDistance(mdMap[i],)
 			///////////////////////////////////////////////////////////////////
 		}
 		
