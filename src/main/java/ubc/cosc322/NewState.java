@@ -25,6 +25,16 @@ public class NewState {
         gameBoard[7][1].setType('W');
         gameBoard[10][4].setType('W');
 	}
+
+    public NewState(char suggestType){
+        for(int i = 1; i<11; i++)//initialize the gameborad to be all null
+            for(int j = 1 ; j<11; j++){
+                gameBoard[i][j] = new Coor(i,j, suggestType);
+            }
+        
+    }
+
+
 	
 	// setter
     public void setCoor(Coor coor){//intended to be used to set new positions of arrows *NOT for setting Amazons

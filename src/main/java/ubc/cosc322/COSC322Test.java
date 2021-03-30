@@ -265,6 +265,7 @@ public class COSC322Test extends GamePlayer{
 		//for each corrdinate on the board
 		//if it is a valid coor && belongs to a queen (which requires another for each loop to find out)
 			//we either increment or decrement utility;
+		
 		NewState[] mdMap = new NewState[8];
 		for(Coor c: suggestedGameBoard.getState('N')){
 			for(int s = 0; s<8 ; s++){
@@ -274,6 +275,14 @@ public class COSC322Test extends GamePlayer{
 
 
 		return utility;
+	}
+
+	public NewState[] getMdMap(NewState suggestedGameBoard){
+		NewState[] mdMap = new NewState[8];
+		for(NewState si : mdMap)
+			si = new NewState('N');
+		
+		return mdMap;
 	}
 	
 	// calculate min-distance  function
