@@ -129,7 +129,6 @@ public class COSC322Test extends GamePlayer{
     		if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
         		this.playerType = 'B';
         		this.runTimeTask(this.playerType);
-        		//this.runTimeTaskTest(this.playerType);
 				//System.out.println("Test Eme Move");
         		//this.makeEmerMove(this.playerType);
         		System.out.println("We are black queens");
@@ -169,8 +168,6 @@ public class COSC322Test extends GamePlayer{
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
     		this.runTimeTask(this.playerType);
-    		//this.runTimeTaskTest(this.playerType);
-    		
     		//makeEmerMove(playerType);
     		
     	}
@@ -218,7 +215,7 @@ public class COSC322Test extends GamePlayer{
 	    
 	    
 	    
-	    Timer timer = new Timer("Timer");
+		Timer timer = new Timer("Timer");
 	    
 	    long delay = 7000L;// second * 1000
 	    timer.schedule(task, delay);
@@ -268,14 +265,11 @@ public class COSC322Test extends GamePlayer{
 		//for each corrdinate on the board
 		//if it is a valid coor && belongs to a queen (which requires another for each loop to find out)
 			//we either increment or decrement utility;
-		
-		for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-            }
-        }
+		NewState[] mdMap = new NewState[8];
 		for(Coor c: suggestedGameBoard.getState('N')){
-			//Now all the c is a valid Coor
-			for()
+			for(int s = 0; s<8 ; s++){
+				
+			}
 		}
 
 
