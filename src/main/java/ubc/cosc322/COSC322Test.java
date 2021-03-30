@@ -128,8 +128,9 @@ public class COSC322Test extends GamePlayer{
     		// ++this.counter;
     		if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
         		this.playerType = 'B';
-				System.out.println("Test Eme Move");
-        		this.makeEmerMove(this.playerType);
+        		this.runTimeTask(this.playerType);
+				//System.out.println("Test Eme Move");
+        		//this.makeEmerMove(this.playerType);
         		System.out.println("We are black queens");
         		
         		//calMinDis(this.s.getState(playerType), this.playerType, this.counter);
@@ -146,7 +147,7 @@ public class COSC322Test extends GamePlayer{
     	}else if (messageType.equals(GameMessage.GAME_ACTION_MOVE)){
     		// this.gamegui.updateGameState(msgDetails);
     		ArrayList <Integer> QueenOri = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_CURR));
-    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_NEXT));
+    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.Queen_POS_NEXT));
     		ArrayList <Integer> arrowNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.ARROW_POS));
     		gamegui.updateGameState(QueenOri,QueenNew,arrowNew);
 
@@ -166,7 +167,8 @@ public class COSC322Test extends GamePlayer{
     		System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
-    		makeEmerMove(playerType);
+    		this.runTimeTask(this.playerType);
+    		//makeEmerMove(playerType);
     		
     	}
     	
@@ -199,15 +201,15 @@ public class COSC322Test extends GamePlayer{
 	
 	
 	// run time task
-	public void runTimeTask(char playerTypeTest) {
+	public void runTimeTask(char playerType) {
 		TimerTask task = new TimerTask() {
 	        public void run() {
 	        	
 	        	// alogrithm runs here
 	    	    // alphaBeta
 	        	
-	            //System.out.println("Time almost running out, perform a quick move.");
-	            makeEmerMove(playerTypeTest);
+	            System.out.println("Time almost running out, perform an emerent move.");
+	            makeEmerMove(playerType);
 	        }
 	    };
 	    
@@ -215,7 +217,7 @@ public class COSC322Test extends GamePlayer{
 	    
 	    Timer timer = new Timer("Timer");
 	    
-	    long delay = 2800L;
+	    long delay = 28000L;// second * 1000
 	    timer.schedule(task, delay);
 	}
 	
