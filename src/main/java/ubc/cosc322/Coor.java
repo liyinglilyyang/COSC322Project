@@ -4,6 +4,7 @@ public class Coor {
 	private int x,y;
 	private char type, owned;
 	private int blackDis,whiteDis;
+	private int index;
 	
 	// Constructor 
 	public Coor(int x, int y, char type){
@@ -62,8 +63,17 @@ public class Coor {
 		this.owned = type;
 	}
 	
+	public void setIndex(int index){
+		this.index = index;
+	}
+
 	
 	// Getter
+
+	public int getIndex(){
+		return index;
+	}
+	
 	public int getX(){
 		return x;
 	}
