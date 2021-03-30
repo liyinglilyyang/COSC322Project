@@ -33,7 +33,8 @@ public class NewState {
         gameBoard[coor.getX()][coor.getY()].setCoor(coor);
         
     }
-
+    
+    // update state
 	public void updateState(Coor op, Coor np) {//op for original pos and so on
         char currentTargetType = gameBoard[np.getX()][np.getY()].getType();//get the type at the current target Position
         if(currentTargetType!='N'){
@@ -44,8 +45,13 @@ public class NewState {
         gameBoard[np.getX()][np.getY()].setType(targetType);//update type at target position
 	}
 	
+	// getter
 	public ArrayList<Coor> getState(char Type){
         ArrayList<Coor> targets = new ArrayList<Coor>();
+        // for(Coor[] itemList: gameBoard)
+        //     for(Coor item : itemList)
+        //         if (item!=null && item.getType()==Type)
+        //             targets.add(item);
         for(int x = 1; x <=10; x++)
             for(int y = 1; y <=10; y++)
                 if(gameBoard[x][y].getType() == Type)
@@ -75,71 +81,15 @@ public class NewState {
     public ArrayList<Coor> getAvailableCoordinates(){//returns all available positions
         return getState('N');
     }
-
-    public boolean CoorValid(int xc, int yc){//np is intended to be the ori
-		return (xc<=10)&&(xc>=1)&&(yc<=10)&&(yc>=1);
-    }
-
-    public void MinDisMap(Coor ori){//not perfect
-        int[][] aL ={{-1, 0},{-1, -1},{-1, 1},{0, -1},{0, 1},{1, 0},{1, -1},{1, 1}};	
-        ArrayList<Coor> queue = new ArrayList<Coor>();
-        queue.add(ori);
-        // int step = level;
-        int level = 1;
-        while(!queue.isEmpty()){//to go until we see an obstacles
-            Coor currentCoor = queue.remove(0);
-            for(int dc = 0; dc<8; dc++){//eight directions
-                int[] currentAction = aL[dc];
-                int xc = currentCoor.getX()+currentAction[0];
-                int yc = currentCoor.getY()+currentAction[1];//get new position
-                while(CoorValid(xc,yc) && gameBoard[xc][yc].getType()=='N'){
-                    if(gameBoard[xc][yc].getIndex()>level){//then we want to update it
-                        gameBoard[xc][yc].setIndex(level);
-                        queue.add(gameBoard[xc][yc]);
-                    }
-                    xc += currentAction[0];
-                    yc += currentAction[1];
-                }
-            } 
-            level++; //we have looked after all the directions o at ori, move on to next level
-        }
-            
-    }
-        // return gameBoard;
     
-    public void MDALL(char type){
-        for(Coor ori : getState(type)){
-            MinDisMap(ori);
-        }
-    }
+//    public int getDis(char type) {
+//    	if (type == 'B') {
+//    		return gameBoard
+//    	}else if (type == 'W') {
+//    		
+//    	}
+//    }
 
-    public void resetMD(){
-        for(int yi = 10; yi >=1; yi--)
-            for(int xi = 1; xi <=10; xi++)
-               gameBoard[xi][yi].setIndex(9);//Integer.MAX_VALUE
-    }
-
-    public String toMD(){
-        String r = "";
-        for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-                r+=gameBoard[xi][yi].getIndex()+", ";
-            }
-            r+="\n";
-        }
-        return r;       
-    }
-
-    public int[][] toMDArry(){
-        int[][] r = new int[11][11];
-        for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-                r[xi][yi] = gameBoard[xi][yi].getIndex();
-            }
-        }
-        return r; 
-    }
-  
     public String toString(){
         String r = "";
         for(int yi = 10; yi >=1; yi--){
@@ -154,7 +104,4 @@ public class NewState {
         return r;
                 
     }
-    // public Coor[][] MinDisMap(char type){
-    //     return gameBoard;
-    // }
 }
