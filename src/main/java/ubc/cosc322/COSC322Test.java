@@ -129,6 +129,7 @@ public class COSC322Test extends GamePlayer{
     		if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
         		this.playerType = 'B';
         		this.runTimeTask(this.playerType);
+        		//this.runTimeTaskTest(this.playerType);
 				//System.out.println("Test Eme Move");
         		//this.makeEmerMove(this.playerType);
         		System.out.println("We are black queens");
@@ -168,6 +169,8 @@ public class COSC322Test extends GamePlayer{
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
     		this.runTimeTask(this.playerType);
+    		//this.runTimeTaskTest(this.playerType);
+    		
     		//makeEmerMove(playerType);
     		
     	}
@@ -217,9 +220,18 @@ public class COSC322Test extends GamePlayer{
 	    
 	    Timer timer = new Timer("Timer");
 	    
-	    long delay = 28000L;// second * 1000
+	    long delay = 7000L;// second * 1000
 	    timer.schedule(task, delay);
+	    showmsg(timer);// minimax goes here with one more para timer
+	    
 	}
+	
+	// test function to cancel the timer 
+	public void showmsg(Timer timer) {
+		System.out.println("timer is terminated.");
+		timer.cancel();
+	}
+	
 	
 	
 	// make decision and send move message
