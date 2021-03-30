@@ -1,6 +1,8 @@
 package ubc.cosc322;
 
 import java.util.ArrayList;
+import java.lang.Cloneable;
+
 
 import ygraph.ai.smartfox.games.Amazon.GameBoard;
 
@@ -8,6 +10,12 @@ public class NewState implements Cloneable{
 	// game state
 	Coor[][] gameBoard = new Coor[11][11];
 	// by the nature of this game, we manually created the state for the game 
+
+    protected Object clone() throws CloneNotSupportedException{
+        
+        return super.clone();
+    }
+
 	public NewState() {
 		for(int i = 1; i<11; i++)//initialize the gameborad to be all null
             for(int j = 1 ; j<11; j++){
