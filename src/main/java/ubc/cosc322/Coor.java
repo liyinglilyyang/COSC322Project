@@ -14,11 +14,12 @@ public class Coor {
 		this.owned = 'N';//B for black, W for White, N for None
 		this.blackDis = 999;//set initial value to positive infinite (or Integer.MAX_VALUE)
 		this.whiteDis = 999;
-		
+		this.index = -1;
 	}
 	
 	public Coor(int x, int y) {
 		this(x,y,'N');
+		this.index = -1;
 	}
 
 	public Coor(int x, int y, int index){
@@ -29,6 +30,7 @@ public class Coor {
 
 	public Coor() {
 		this(0,0,'N');
+		this.index = -1;
 	}
 	
 	

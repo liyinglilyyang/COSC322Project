@@ -117,41 +117,38 @@ public class COSC322Test extends GamePlayer{
     	
     	
     	// GameMessage.GAME_STATE_BOARD
-    	if (messageType.equals(GameMessage.GAME_STATE_BOARD)) {
+    	if (messageType.equals(AmazonsGameMessage.GAME_STATE_BOARD)) {
     		ArrayList<Integer> gameBoardState = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.GAME_STATE);
     		this.gamegui.setGameState(gameBoardState);
+			//the above coede is by default
 			currentGameBoard = gameBoardState;
 			System.out.println("****We are updating game board****");
     	// GameMessage.GAME_ACTION_START
-    	}else if (messageType.equals(GameMessage.GAME_ACTION_START)) {
+    	}else if (messageType.equals(AmazonsGameMessage.GAME_ACTION_START)) {
     		// set player type 
     		// ++this.counter;
     		if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_BLACK))) {
         		this.playerType = 'B';
         		// this.runTimeTask(this.playerType);
 				//System.out.println("Test Eme Move");
-        		this.makeEmerMove(this.playerType);
+				makeMove(playerType);
         		System.out.println("We are black queens");
-        		
-        		//calMinDis(this.s.getState(playerType), this.playerType, this.counter);
-        		// System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
-        		// this.counter++;
         	}else if (this.userName.equals((String) msgDetails.get(AmazonsGameMessage.PLAYER_WHITE))){
         		this.playerType = 'W';
-        		//this.makeEmerMove(this.playerType);
         		System.out.println("We are white queens");
-   
         	}
     	
     	// GameMessage.GAME_ACTION_MOVE
-    	}else if (messageType.equals(GameMessage.GAME_ACTION_MOVE)){
+    	}else if (messageType.equals(AmazonsGameMessage.GAME_ACTION_MOVE)){
     		// this.gamegui.updateGameState(msgDetails);
     		ArrayList <Integer> QueenOri = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_CURR));
     		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_NEXT));
     		ArrayList <Integer> arrowNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.ARROW_POS));
     		gamegui.updateGameState(QueenOri,QueenNew,arrowNew);
-
+			//newly added 
+			// updateBoard(QueenOri, QueenNew, arrowNew);
 			System.out.println("Start Run---------------------------------------------");
+			long startTime=System.currentTimeMillis();
     		Coor Ori_Position = new Coor(QueenOri.get(1), QueenOri.get(0));
     		Coor New_Position = new Coor(QueenNew.get(1), QueenNew.get(0));
     		Coor Arrow_Position = new Coor(arrowNew.get(1), arrowNew.get(0),'A');
@@ -168,8 +165,14 @@ public class COSC322Test extends GamePlayer{
     		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
     		// ++this.counter;
     		// this.runTimeTask(this.playerType);
-    		makeEmerMove(playerType);
-    		
+    		// makeEmerMove(playerType);
+			makeMove(playerType);
+    		long endTime=System.currentTimeMillis();
+        	System.out.println("Run time: "+(endTime-startTime)+"ms-----------------------------------------------");
+		
+			
+			
+			
     	}
     	
     	return true;   	
@@ -236,6 +239,7 @@ public class COSC322Test extends GamePlayer{
 		// minimax = alphaBetaSearch();
 		
 		// makeAction();
+		makeEmerMove(playerType);
 	}
 	
 	
@@ -248,19 +252,78 @@ public class COSC322Test extends GamePlayer{
 		ArrayList<Action> allActions = new ArrayList<Action>();
 		for(Coor queen: queens)
 			allActions.addAll(getActions(s,queen));
-		System.out.println("***********The number of random actions we have is: "+ allActions.size());
+		//the above could be replaced using getAllActions()
+
+		System.out.println("***********The number of random actions we have is: "+ allActions.size() +"***************");
 		int i = (int)(allActions.size()*Math.random());
+		//randomlly select an action
 		Action randomAction = allActions.get(i);
+		
+		//------------------------------
+		// Action mostUtilityAction = allActions.get(0);
+		// int mostUtility = findUtility(creatHypotheticalMap(s,mostUtilityAction));
+		// for(Action a: allActions){
+		// 	int currentU = findUtility(creatHypotheticalMap(s,a));
+		// 	if(currentU>mostUtility){
+		// 		//we should update
+		// 		mostUtilityAction = a;
+		// 		mostUtility = currentU;
+		// 	}
+		// }
+		//------------------------------
+
+		//------------------------------
+		Action mostUtilityAction = allActions.get(0);
+		int mostUtility = getAllActions(creatHypotheticalMap(s,mostUtilityAction),playerType).size();
+		for(Action a: allActions){
+			// int currentU = findUtility(creatHypotheticalMap(s,a));
+			int currentU = getAllActions(creatHypotheticalMap(s,a),playerType).size();
+			if(currentU>mostUtility){
+				//we should update
+				mostUtilityAction = a;
+				mostUtility = currentU;
+			}
+		}
+		//------------------------------
+
+		Action decide = mostUtilityAction;
+
+		// System.out.println("utility is " + findUtility(s));
+		//******************************************* */
 		// Coor ap = new Coor(randomAction.getOr().getX(),randomAction.getOr().getY(),'A');
 		// // always shoot to ori, for test purpose
 		
-		// ArrayList<Action> ArrowP = getActions(s,randomAction.getDe());
 		
-		ArrayList<Action> ArrowP = getActions(creatHypotheticalMap(s, randomAction),randomAction.getDe());
+		//we have already decided the action, namely the ori and de coordinates
+		//now we are looking at merely the new arrow position
+		ArrayList<Action> ArrowP = getActions(creatHypotheticalMap(s, decide), decide.getDe());
+		if(ArrowP.size()==0){
+			System.out.println("********************_____________________***************************");
+			System.out.println(decide.getOr());
+			System.out.println(decide.getDe());
+		}
+		//ArrowP contains all the possible actions
+		// Action bestArrow = ArrowP.get(0);
+		// int bestActions = getAllActions(creatHypotheticalMap(s, randomAction,bestArrow.getDe()), playerType).size();
+
+		// for(Action a: ArrowP){
+		// 	int currentSize = getAllActions(creatHypotheticalMap(s, randomAction, a.getDe()), playerType).size();
+
+		// 	System.out.println("the current random action number available is: " + currentSize);
+		// 	if(currentSize<bestActions){
+		// 		//we've found a better arrow position, so we update
+		// 		bestArrow = a;
+		// 		bestActions = currentSize;
+		// 	}
+		// }
+		// this generates a random action at index namely j
 		int j = (int)(ArrowP.size()*Math.random());
-		updateAction(randomAction.getOr(),randomAction.getDe(),ArrowP.get(j).getDe());
-		if(randomAction.getDe().equals(ArrowP.get(j).getOr()))
-			System.out.println("This is a valid arrow shooting action!");
+		updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
+
+		// updateAction(randomAction.getOr(), randomAction.getDe(), bestArrow.getDe());
+
+		// if(randomAction.getDe().equals(bestArrow.getOr()))
+		// 	System.out.println("This is a valid arrow shooting action!");
 
 		// for(Coor currentQueen : queens){//the first queen
 		// 	for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
@@ -279,31 +342,39 @@ public class COSC322Test extends GamePlayer{
 	}
 	
 	public int findUtility(NewState suggestedGameBoard){
-		
-		int utility = 0;
+		int blackUtility = 0;
 		//for each corrdinate on the board
 		//if it is a valid coor && belongs to a queen (which requires another for each loop to find out)
 			//we either increment or decrement utility;
 		
-		NewState[] mdMap = new NewState[8];
-		for(Coor c: suggestedGameBoard.getState('N')){
-			for(int s = 0; s<8 ; s++){
+		// NewState[] mdMap = new NewState[8];
+		// for(Coor c: suggestedGameBoard.getState('N')){
+		// 	for(int s = 0; s<8 ; s++){
 				
+		// 	}
+		// }
+		NewState black = assignMinDistance(suggestedGameBoard,'B');
+
+		NewState white = assignMinDistance(suggestedGameBoard,'W');
+
+		for(int yi = 10; yi >=1; yi--)
+            for(int xi = 1; xi <=10; xi++){
+				//firstly, we want to make sure it is not -1
+				if(black.getState()[xi][yi].getIndex()==white.getState()[xi][yi].getIndex()){
+					//do nothing
+				}else if(white.getState()[xi][yi].getIndex()==-1 && black.getState()[xi][yi].getIndex()>0){
+					blackUtility++;
+				}else if(black.getState()[xi][yi].getIndex()==-1 && white.getState()[xi][yi].getIndex()>0){
+					blackUtility--;
+				}else if(black.getState()[xi][yi].getIndex()<white.getState()[xi][yi].getIndex()){
+					blackUtility++;
+				}else{
+					blackUtility--;
+				}
 			}
-		}
+ 
 
-
-		return utility;
-	}
-
-	public NewState creatHypotheticalMap(NewState oriMap, Action action){
-		NewState hm = new NewState('A');
-		for(Coor c: oriMap.getState('N')){
-			hm.setCoor(c);
-		}
-		hm.getCoor(action.getDe()).setType('A');//the destination ought to be covered
-		hm.getCoor(action.getOr()).setType('N');//the ori ought to be space
-		return hm;
+		return playerType == 'B' ? blackUtility : -blackUtility;
 	}
 
 	public NewState[] getMdMap(NewState suggestedGameBoard){
@@ -331,9 +402,10 @@ public class COSC322Test extends GamePlayer{
 			queue.add(a.getDe());
 			oneQueenMap.setCoorIndex(a.getDe(),1);
 		}
+		
 		while(!queue.isEmpty()){
 			Coor currentNode = queue.remove(0);
-			for(Action a: getActions(oneQueenMap,currentNode)){
+			for(Action a: getActions(oneQueenMap,currentNode)){//we weren't sure if we want to call creatHypotheticalMap or not
 				if(a.getDe().getIndex()==-1){//if we have not visit it before
 					queue.add(a.getDe());
 					oneQueenMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
@@ -342,12 +414,37 @@ public class COSC322Test extends GamePlayer{
 		}
 	}
 	
+	public NewState assignMinDistance(NewState suggestedmap, char playerT){
+		ArrayList<Coor> queue = new ArrayList<Coor>();
+
+		NewState indexMap = CopyMap(suggestedmap);//we will return it
+
+		for(Action a: getAllActions(indexMap,playerT)){
+			queue.add(a.getDe());
+			indexMap.setCoorIndex(a.getDe(),1);
+		}
+		System.out.println("index map for player: " + playerT);
+		System.out.println(indexMap);
+		
+		while(!queue.isEmpty()){
+			Coor currentNode = queue.remove(0);
+			for(Action a: getActions(suggestedmap,currentNode)){//we weren't sure if we want to call creatHypotheticalMap or not
+				if(a.getDe().getIndex()==-1){//if we have not visit it before
+					queue.add(a.getDe());
+					indexMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
+				}
+			}
+		}
+		System.out.println(indexMap);
+		return indexMap;
+	}
+
 	public ArrayList<Action> getActions(NewState oneQueenMap, Coor queen){
 		ArrayList<Action> actions = new ArrayList<Action>();
 		//for all directions
 		//while a step is available, go into it
-		System.out.println("We are now printing one instance of a one queen map");
-		System.out.println(oneQueenMap);
+		// System.out.println("We are now printing one instance of a one queen map");
+		// System.out.println(oneQueenMap);
 
 		for(int di = 0; di < 8; di++){
 			int step = 1;
@@ -357,6 +454,27 @@ public class COSC322Test extends GamePlayer{
 			}
 		}
 		return actions;
+	}
+
+	public ArrayList<Action> getAllActions(NewState suggestedMap, char playerType){
+		ArrayList<Coor> queens = suggestedMap.getState(playerType);
+		ArrayList<Action> allActions = new ArrayList<Action>();
+		for(Coor queen: queens)
+			allActions.addAll(getActions(s,queen));
+		return allActions;
+	}
+	
+	public NewState creatHypotheticalMap(NewState oriMap, Action action){
+		NewState hm = CopyMap(oriMap);
+		hm.getCoor(action.getDe()).setType(action.getOr().getType());//the destination ought to be covered
+		hm.getCoor(action.getOr()).setType('N');//the ori ought to be space
+		return hm;
+	}
+
+	public NewState creatHypotheticalMap(NewState oriMap, Action action, Coor Ap){//for arrow position
+		NewState hm = creatHypotheticalMap(oriMap,action);
+		hm.setCoor(Ap);
+		return hm;
 	}
 
 	// calculate min-distance  function
@@ -499,5 +617,20 @@ public class COSC322Test extends GamePlayer{
 		gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
 		getGameGUI().updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
 	}
- 
+
+	public NewState CopyMap(NewState Ori){
+		NewState hm = new NewState('N');
+		Coor[][] ori = Ori.getState();
+		for(int yi = 10; yi >=1; yi--){
+            for(int xi = 1; xi <=10; xi++){
+				hm.setCoor(ori[xi][yi]);
+            }
+        }
+		// System.out.println("The first -------------------");
+		// System.out.println(Ori);
+		
+		// System.out.println("The Second -------------------");
+		// System.out.println(hm);
+		return hm;
+	}
 }//end of class
