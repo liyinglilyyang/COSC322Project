@@ -51,8 +51,13 @@ public class StateHelper {
         //this returns a map consistenting MinDistance Information for the current board
 		int[][] minDistanceMap = new int[11][11];//a matrix for min distance
 		ArrayList<Coor> queue = new ArrayList<Coor>();
-		for(Action a: getAllActions(targetType)){
+		ArrayList<Coor> queens = suggestedMap.getState(targetType);
+		for(Action a: getAllActions(queens)){
 			queue.add(a.getDe());//insert all possible destination position to the queue
+			minDistanceMap[a.getDe().getX()][a.getDe().getY()] = 1;//set min distance to 1, since they can be reached in 1 step
+		}
+
+		while(!queue.isEmpty()){
 			
 		}
 
@@ -67,6 +72,13 @@ public class StateHelper {
 
     private ArrayList<Action> getAllActions(char targetType){
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
+		ArrayList<Action> allActions = new ArrayList<Action>();
+		for(Coor queen: queens)
+			allActions.addAll(getActions(queen));
+		return allActions;
+	}
+
+	private ArrayList<Action> getAllActions(ArrayList<Coor> queens){
 		ArrayList<Action> allActions = new ArrayList<Action>();
 		for(Coor queen: queens)
 			allActions.addAll(getActions(queen));
@@ -119,18 +131,5 @@ public class StateHelper {
 		int targetX = ori.getX()+currentAction[0]*step;
 		int targetY = ori.getY()+currentAction[1]*step;
 		return isCoorValid(new Coor(targetX,targetY)) && suggestedMap.getType(targetX,targetY) == 'N';
-	}
-
-	public NewState creatHypotheticalMap(NewState oriMap, Action action){
-		NewState hm = CopyMap(oriMap);
-		hm.getCoor(action.getDe()).setType(action.getOr().getType());//the destination ought to be covered
-		hm.getCoor(action.getOr()).setType('N');//the ori ought to be space
-		return hm;
-	}
-
-	public NewState creatHypotheticalMap(NewState oriMap, Action action, Coor Ap){//for arrow position
-		NewState hm = creatHypotheticalMap(oriMap,action);
-		hm.setCoor(Ap);
-		return hm;
 	}
 }
