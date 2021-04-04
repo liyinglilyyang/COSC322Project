@@ -258,34 +258,38 @@ public class COSC322Test extends GamePlayer{
 		int i = (int)(allActions.size()*Math.random());
 		//randomlly select an action
 		Action randomAction = allActions.get(i);
-		
-		//------------------------------
-		// Action mostUtilityAction = allActions.get(0);
-		// int mostUtility = findUtility(creatHypotheticalMap(s,mostUtilityAction));
-		// for(Action a: allActions){
-		// 	int currentU = findUtility(creatHypotheticalMap(s,a));
-		// 	if(currentU>mostUtility){
-		// 		//we should update
-		// 		mostUtilityAction = a;
-		// 		mostUtility = currentU;
-		// 	}
-		// }
-		//------------------------------
-
-		//------------------------------
-		Action mostUtilityAction = allActions.get(0);
-		int mostUtility = getAllActions(creatHypotheticalMap(s,mostUtilityAction),playerType).size();
-		for(Action a: allActions){
-			// int currentU = findUtility(creatHypotheticalMap(s,a));
-			int currentU = getAllActions(creatHypotheticalMap(s,a),playerType).size();
-			if(currentU>mostUtility){
-				//we should update
-				mostUtilityAction = a;
-				mostUtility = currentU;
+		Action mostUtilityAction;
+		if(s.getState('N').size()> 30){
+			//------------------------------
+			System.out.println("Early");
+			mostUtilityAction = allActions.get(0);
+			int mostUtility = getAllActions(creatHypotheticalMap(s,mostUtilityAction),playerType).size();
+			for(Action a: allActions){
+				// int currentU = findUtility(creatHypotheticalMap(s,a));
+				int currentU = getAllActions(creatHypotheticalMap(s,a),playerType).size();
+				if(currentU>mostUtility){
+					//we should update
+					mostUtilityAction = a;
+					mostUtility = currentU;
+				}
 			}
+			//------------------------------
+		}else{
+			System.out.println("End Game");
+			//------------------------------
+			mostUtilityAction = allActions.get(0);
+			// int mostUtility = findUtility(creatHypotheticalMap(s,mostUtilityAction));
+			int mostUtility = findUtility(creatHypotheticalMap(s,mostUtilityAction));
+			for(Action a: allActions){
+				int currentU = findUtility(creatHypotheticalMap(s,a));
+				if(currentU>mostUtility){
+					//we should update
+					mostUtilityAction = a;
+					mostUtility = currentU;
+				}
+			}
+			//------------------------------
 		}
-		//------------------------------
-
 		Action decide = mostUtilityAction;
 
 		// System.out.println("utility is " + findUtility(s));
@@ -343,18 +347,9 @@ public class COSC322Test extends GamePlayer{
 	
 	public int findUtility(NewState suggestedGameBoard){
 		int blackUtility = 0;
-		//for each corrdinate on the board
-		//if it is a valid coor && belongs to a queen (which requires another for each loop to find out)
-			//we either increment or decrement utility;
-		
-		// NewState[] mdMap = new NewState[8];
-		// for(Coor c: suggestedGameBoard.getState('N')){
-		// 	for(int s = 0; s<8 ; s++){
-				
-		// 	}
-		// }
+		System.out.println("Now we find utility");
 		NewState black = assignMinDistance(suggestedGameBoard,'B');
-
+		System.out.println("Now we find utility for white queens");
 		NewState white = assignMinDistance(suggestedGameBoard,'W');
 
 		for(int yi = 10; yi >=1; yi--)
@@ -397,21 +392,21 @@ public class COSC322Test extends GamePlayer{
 	public void assignMinDistance(NewState oneQueenMap, Coor queen){
 		ArrayList<Coor> queue = new ArrayList<Coor>();
 		//this queue stores all the list of available neighbours
-		
+		System.out.println(oneQueenMap);
 		for(Action a: getActions(oneQueenMap,queen)){
 			queue.add(a.getDe());
 			oneQueenMap.setCoorIndex(a.getDe(),1);
 		}
 		
-		while(!queue.isEmpty()){
-			Coor currentNode = queue.remove(0);
-			for(Action a: getActions(oneQueenMap,currentNode)){//we weren't sure if we want to call creatHypotheticalMap or not
-				if(a.getDe().getIndex()==-1){//if we have not visit it before
-					queue.add(a.getDe());
-					oneQueenMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
-				}
-			}
-		}
+		// while(!queue.isEmpty()){
+		// 	Coor currentNode = queue.remove(0);
+		// 	for(Action a: getActions(oneQueenMap,currentNode)){//we weren't sure if we want to call creatHypotheticalMap or not
+		// 		if(a.getDe().getIndex()==-1){//if we have not visit it before
+		// 			queue.add(a.getDe());
+		// 			oneQueenMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
+		// 		}
+		// 	}
+		// }
 	}
 	
 	public NewState assignMinDistance(NewState suggestedmap, char playerT){
@@ -424,7 +419,7 @@ public class COSC322Test extends GamePlayer{
 			indexMap.setCoorIndex(a.getDe(),1);
 		}
 		System.out.println("index map for player: " + playerT);
-		System.out.println(indexMap);
+		System.out.println(indexMap.toStringIndex());
 		
 		while(!queue.isEmpty()){
 			Coor currentNode = queue.remove(0);
@@ -630,7 +625,8 @@ public class COSC322Test extends GamePlayer{
 		// System.out.println(Ori);
 		
 		// System.out.println("The Second -------------------");
-		// System.out.println(hm);
+		// System.out.println(hm);\
+		System.out.println(hm);
 		return hm;
 	}
 }//end of class
