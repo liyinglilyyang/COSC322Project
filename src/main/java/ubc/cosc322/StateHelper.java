@@ -114,4 +114,17 @@ public class StateHelper {
 		int targetY = ori.getY()+currentAction[1]*step;
 		return isCoorValid(new Coor(targetX,targetY)) && suggestedMap.getType(targetX,targetY) == 'N';
 	}
+
+	public NewState creatHypotheticalMap(NewState oriMap, Action action){
+		NewState hm = CopyMap(oriMap);
+		hm.getCoor(action.getDe()).setType(action.getOr().getType());//the destination ought to be covered
+		hm.getCoor(action.getOr()).setType('N');//the ori ought to be space
+		return hm;
+	}
+
+	public NewState creatHypotheticalMap(NewState oriMap, Action action, Coor Ap){//for arrow position
+		NewState hm = creatHypotheticalMap(oriMap,action);
+		hm.setCoor(Ap);
+		return hm;
+	}
 }

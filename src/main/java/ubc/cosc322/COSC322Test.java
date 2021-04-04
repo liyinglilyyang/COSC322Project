@@ -229,9 +229,6 @@ public class COSC322Test extends GamePlayer{
 		// Coor queen = queens.get((int)Math.random()*4);
 
 		ArrayList<Action> allActions = new ArrayList<Action>();
-		for(Coor queen: queens)
-			allActions.addAll(getActions(s,queen));
-		//the above could be replaced using getAllActions()
 
 		System.out.println("***********The number of random actions we have is: "+ allActions.size() +"***************");
 		int i = (int)(allActions.size()*Math.random());
@@ -269,13 +266,7 @@ public class COSC322Test extends GamePlayer{
 			}
 			//------------------------------
 		}
-		Action decide = mostUtilityAction;
-
-		// System.out.println("utility is " + findUtility(s));
-		//******************************************* */
-		// Coor ap = new Coor(randomAction.getOr().getX(),randomAction.getOr().getY(),'A');
-		// // always shoot to ori, for test purpose
-		
+		Action decide = mostUtilityAction;	
 		
 		//we have already decided the action, namely the ori and de coordinates
 		//now we are looking at merely the new arrow position
@@ -288,185 +279,35 @@ public class COSC322Test extends GamePlayer{
 		int j = (int)(ArrowP.size()*Math.random());
 		updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
 	}
-	
-	public int findUtility(NewState suggestedGameBoard){
-		int blackUtility = 0;
-		System.out.println("Now we find utility");
-		NewState black = assignMinDistance(suggestedGameBoard,'B');
-		System.out.println("Now we find utility for white queens");
-		NewState white = assignMinDistance(suggestedGameBoard,'W');
 
-		for(int yi = 10; yi >=1; yi--)
-            for(int xi = 1; xi <=10; xi++){
-				//firstly, we want to make sure it is not -1
-				if(black.getState()[xi][yi].getIndex()==white.getState()[xi][yi].getIndex()){
-					//do nothing
-				}else if(white.getState()[xi][yi].getIndex()==-1 && black.getState()[xi][yi].getIndex()>0){
-					blackUtility++;
-				}else if(black.getState()[xi][yi].getIndex()==-1 && white.getState()[xi][yi].getIndex()>0){
-					blackUtility--;
-				}else if(black.getState()[xi][yi].getIndex()<white.getState()[xi][yi].getIndex()){
-					blackUtility++;
-				}else{
-					blackUtility--;
-				}
-			}
- 
 
-		return playerType == 'B' ? blackUtility : -blackUtility;
-	}
 
-	public NewState[] getMdMap(NewState suggestedGameBoard){
-		NewState[] mdMap = new NewState[8];
-		for(NewState si : mdMap){
-			si = new NewState('A');
-			for(Coor c: suggestedGameBoard.getState('N'))
-				si.setCoor(new Coor(c.getX(),c.getY(),-1));
-		}//Now mdMap contains 8 identical maps, and all available positions are N
-		int i = 0;
-		//black first, white second
-		for(Coor c: suggestedGameBoard.getState('B')){
-			// assignMinDistance(mdMap[i],)
-			///////////////////////////////////////////////////////////////////
-		}
-		
-		return mdMap;
-	}
+	// // move function, will only move one tile at valid direction (legacy) 
+	// public boolean makeAction(Coor ori, int step, int direction){
+	// 	//notice that we always shoot to where we started
+	// 	if(hasValidAction(ori,step,direction)){
+	// 		int[] currentAction = actionList[direction];
+	// 		Coor op = ori;
+	// 		Coor np = s.getCoor(ori.getX()+currentAction[0],ori.getY()+currentAction[1]);
+	// 		Coor ap = new Coor(op.getX(),op.getY(),'A');// always shoot to ori, for test purpose
+	// 		updateAction(op,np,ap);
+	// 		return true;
+	// 	}else
+	// 		return false;
 
-	public void assignMinDistance(NewState oneQueenMap, Coor queen){
-		ArrayList<Coor> queue = new ArrayList<Coor>();
-		//this queue stores all the list of available neighbours
-		System.out.println(oneQueenMap);
-		for(Action a: getActions(oneQueenMap,queen)){
-			queue.add(a.getDe());
-			oneQueenMap.setCoorIndex(a.getDe(),1);
-		}
-		
-		// while(!queue.isEmpty()){
-		// 	Coor currentNode = queue.remove(0);
-		// 	for(Action a: getActions(oneQueenMap,currentNode)){//we weren't sure if we want to call creatHypotheticalMap or not
-		// 		if(a.getDe().getIndex()==-1){//if we have not visit it before
-		// 			queue.add(a.getDe());
-		// 			oneQueenMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
-		// 		}
-		// 	}
-		// }
-	}
-	
-	public NewState assignMinDistance(NewState suggestedmap, char playerT){
-		ArrayList<Coor> queue = new ArrayList<Coor>();
-
-		NewState indexMap = CopyMap(suggestedmap);//we will return it
-
-		for(Action a: getAllActions(indexMap,playerT)){
-			queue.add(a.getDe());
-			indexMap.setCoorIndex(a.getDe(),1);
-		}
-		System.out.println("index map for player: " + playerT);
-		System.out.println(indexMap.toStringIndex());
-		
-		while(!queue.isEmpty()){
-			Coor currentNode = queue.remove(0);
-			for(Action a: getActions(suggestedmap,currentNode)){//we weren't sure if we want to call creatHypotheticalMap or not
-				if(a.getDe().getIndex()==-1){//if we have not visit it before
-					queue.add(a.getDe());
-					indexMap.setCoorIndex(a.getDe(),a.getDe().getIndex()+1);
-				}
-			}
-		}
-		System.out.println(indexMap);
-		return indexMap;
-	}
-
-	public ArrayList<Action> getActions(NewState oneQueenMap, Coor queen){
-		ArrayList<Action> actions = new ArrayList<Action>();
-		//for all directions
-		//while a step is available, go into it
-		// System.out.println("We are now printing one instance of a one queen map");
-		// System.out.println(oneQueenMap);
-
-		for(int di = 0; di < 8; di++){
-			int step = 1;
-			while(hasValidAction(queen,step,di,oneQueenMap)){
-				actions.add(new Action(queen,step,di));
-				step++;
-			}
-		}
-		return actions;
-	}
-
-	public ArrayList<Action> getAllActions(NewState suggestedMap, char playerType){
-		ArrayList<Coor> queens = suggestedMap.getState(playerType);
-		ArrayList<Action> allActions = new ArrayList<Action>();
-		for(Coor queen: queens)
-			allActions.addAll(getActions(s,queen));
-		return allActions;
-	}
-	
-	public NewState creatHypotheticalMap(NewState oriMap, Action action){
-		NewState hm = CopyMap(oriMap);
-		hm.getCoor(action.getDe()).setType(action.getOr().getType());//the destination ought to be covered
-		hm.getCoor(action.getOr()).setType('N');//the ori ought to be space
-		return hm;
-	}
-
-	public NewState creatHypotheticalMap(NewState oriMap, Action action, Coor Ap){//for arrow position
-		NewState hm = creatHypotheticalMap(oriMap,action);
-		hm.setCoor(Ap);
-		return hm;
-	}
-
-	// move function, will only move one tile at valid direction (legacy) 
-	public boolean makeAction(Coor ori, int step, int direction){
-		//notice that we always shoot to where we started
-		if(hasValidAction(ori,step,direction)){
-			int[] currentAction = actionList[direction];
-			Coor op = ori;
-			Coor np = s.getCoor(ori.getX()+currentAction[0],ori.getY()+currentAction[1]);
-			Coor ap = new Coor(op.getX(),op.getY(),'A');// always shoot to ori, for test purpose
-			updateAction(op,np,ap);
-			return true;
-		}else
-			return false;
-
-		// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
-	}
-
-	//int[][] actionList = {{-1, 0}, {-1, -1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};	
-	// test whether given queen has valid move
-	public boolean hasValidAction(Coor ori, int step, int direction){
-		int[] currentAction = actionList[direction];
-		int targetX = ori.getX()+currentAction[0]*step;
-		int targetY = ori.getY()+currentAction[1]*step;
-		return isCoorValid(new Coor(targetX,targetY)) && s.getType(targetX,targetY) == 'N';
-		// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
-	}
-
-	public boolean hasValidAction(Coor ori, int step, int direction, NewState suggestedGameMap){
-		int[] currentAction = actionList[direction];
-		int targetX = ori.getX()+currentAction[0]*step;
-		int targetY = ori.getY()+currentAction[1]*step;
-		return isCoorValid(new Coor(targetX,targetY)) && suggestedGameMap.getType(targetX,targetY) == 'N';
-	}
-
-	// test whether the move is valid (Legacy)
-	public boolean isCoorValid(Coor np){
-		return (np.getX()<=10)&&(np.getX()>=1)&&(np.getY()<=10)&&(np.getY()>=1);
-	}
+	// 	// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
+	// }
 
 	// send move msg to server
 	public void updateAction(Coor op, Coor np, Coor ap){
-		System.out.println("We are now updating actions");
-		//we update state object information
+		System.out.println("We are now updating actions");//we update state object information
 		s.updateState(op, np);//move Amazons to new position
 		s.setCoor(ap,'A');//update Arrow on board
-
-		//now we prepare information to send to the server
 		System.out.println(s);//print state
+		//now we prepare information to send to the server
 		ArrayList <Integer> moveQueenOri = new ArrayList <Integer>();//{{op.getX();op.getY();}}
 		ArrayList <Integer> moveQueenNew = new ArrayList <Integer>();//{{np.getX();np.getY();}}
 		ArrayList <Integer> movearrowNew = new ArrayList <Integer>();//{{ap.getX();ap.getY();}}
-
 		//update y
 		moveQueenOri.add(op.getY());
 		moveQueenNew.add(np.getY());
@@ -475,25 +316,9 @@ public class COSC322Test extends GamePlayer{
 		moveQueenOri.add(op.getX());
 		moveQueenNew.add(np.getX());
 		movearrowNew.add(ap.getX());
-		
 		gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
 		getGameGUI().updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
 	}
 
-	public NewState CopyMap(NewState Ori){
-		NewState hm = new NewState('N');
-		Coor[][] ori = Ori.getState();
-		for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-				hm.setCoor(ori[xi][yi]);
-            }
-        }
-		// System.out.println("The first -------------------");
-		// System.out.println(Ori);
-		
-		// System.out.println("The Second -------------------");
-		// System.out.println(hm);\
-		System.out.println(hm);
-		return hm;
-	}
+
 }//end of class
