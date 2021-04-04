@@ -2,6 +2,15 @@ package ubc.cosc322;
 
 import java.util.ArrayList;
 
+
+/**
+ * This class encapsulates some methods for analyzing the State
+ * 
+ * This includes:
+ 	* Utility Calculation for a current Map
+	* get Action List for a current Map
+ */
+
 public class StateHelper {
     public NewState suggestedMap;
     private char playerType;
