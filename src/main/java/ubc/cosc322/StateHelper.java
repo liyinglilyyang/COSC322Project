@@ -7,7 +7,7 @@ public class StateHelper {
     private char playerType;
     private char opType;
 
-    public UtilityCalculator(NewState suggestedMap, char playerType){
+    public StateHelper(NewState suggestedMap, char playerType){
         this.suggestedMap =CopyMap(suggestedMap);
         this.playerType = playerType;
         this.opType = playerType == 'B' ? 'W':'B';//we assign the opType to be different form player type

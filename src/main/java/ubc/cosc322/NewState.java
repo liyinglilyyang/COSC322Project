@@ -3,7 +3,7 @@ package ubc.cosc322;
 import java.util.ArrayList;
 
 
-import ygraph.ai.smartfox.games.Amazon.GameBoard;
+// import ygraph.ai.smartfox.games.Amazon.GameBoard;
 
 public class NewState {
 	// game state
@@ -38,15 +38,11 @@ public class NewState {
 	
 	// setter
     public void setCoor(Coor coor){//intended to be used to set new positions of arrows *NOT for setting Amazons
-        if(coor.getType()!='A' && coor.getType()!='N' ){//print error message
-            // System.out.println("Warning! Unexpected setting method occured at position " + coor.getX()+","+coor.getY());
-        }
-        // gameBoard[coor.getX()][coor.getY()].setCoor(coor);
         gameBoard[coor.getX()][coor.getY()].setType(coor.getType());
     }
 
     public void setCoor(Coor coor, char type){
-        gameBoard[coor.getX()][coor.getY()].setCoor(coor, type);
+        gameBoard[coor.getX()][coor.getY()].setCoorType(type);
     }
 
     public void setCoorIndex(Coor coor, int index){
