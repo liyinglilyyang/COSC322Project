@@ -2,6 +2,8 @@ package ubc.cosc322;
 
 import java.util.ArrayList;
 
+import ygraph.ai.smartfox.games.Amazon.GameBoard;
+
 
 /**
  * This class encapsulates some methods for analyzing the State
@@ -25,12 +27,20 @@ public class StateHelper {
     public int getUtility(){
         //this returns the current Utility
         //this should invoke getMinDistanceMap() for comparison
+		
         return 0;
     }
 
-    private NewState getMinDistanceMap(char targetType){
+    private int[][] getMinDistanceMap(char targetType){
         //this returns a map consistenting MinDistance Information for the current board
-        return new NewState();
+		int[][] minDistanceMap = new int[11][11];
+		for(int yi = 10; yi >=1; yi--){
+            for(int xi = 1; xi <=10; xi++){
+                
+            }
+        }
+		
+        return minDistanceMap;
     }
 
     public ArrayList<Action> getAllActions(){
@@ -50,7 +60,7 @@ public class StateHelper {
 
 		for(int di = 0; di < 8; di++){
 			int step = 1;
-			while(hasValidAction(queen,step,di,suggestedMap)){
+			while(hasValidAction(queen,step,di)){
 				actions.add(new Action(queen,step,di));
 				step++;
 			}
@@ -72,7 +82,7 @@ public class StateHelper {
 		// System.out.println(Ori);
 		
 		// System.out.println("The Second -------------------");
-		// System.out.println(hm);\
+		// System.out.println(hm);
 		System.out.println(hm);
 		return hm;
 	}
@@ -81,11 +91,11 @@ public class StateHelper {
 		return (np.getX()<=10)&&(np.getX()>=1)&&(np.getY()<=10)&&(np.getY()>=1);
 	}
 
-    private boolean hasValidAction(Coor ori, int step, int direction, NewState suggestedGameMap){
+    private boolean hasValidAction(Coor ori, int step, int direction){
         int[][] actionList ={{-1, 0},{-1, -1},{-1, 1},{0, -1},{0, 1},{1, 0},{1, -1},{1, 1}};	
 		int[] currentAction = actionList[direction];
 		int targetX = ori.getX()+currentAction[0]*step;
 		int targetY = ori.getY()+currentAction[1]*step;
-		return isCoorValid(new Coor(targetX,targetY)) && suggestedGameMap.getType(targetX,targetY) == 'N';
+		return isCoorValid(new Coor(targetX,targetY)) && suggestedMap.getType(targetX,targetY) == 'N';
 	}
 }
