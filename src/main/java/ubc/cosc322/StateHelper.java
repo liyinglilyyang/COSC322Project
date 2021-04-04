@@ -37,7 +37,7 @@ public class StateHelper {
 					//do nothing
 				}else if(pm[xi][yi] == -1 || pm[xi][yi] > om[xi][yi]){
 					utility--;
-				}else if(om[xi][yi] == -1 || pm[xi][yi] > om[xi][yi]){
+				}else if(om[xi][yi] == -1 || pm[xi][yi] < om[xi][yi]){
 					utility++;
 				}else{
 					System.out.println("Error in utility calculation: " + pm[xi][yi] + ", " + om[xi][yi]);
@@ -46,6 +46,21 @@ public class StateHelper {
         }
         return utility;
     }
+
+	public void printMatrix(int[][] target){//temerpary method
+		System.out.println("---------------------");
+		for(int yi = 10; yi >=1; yi--){
+            for(int xi = 1; xi <=10; xi++){
+                // target[yi][xi]
+				if(target[xi][yi] == 99)
+					System.out.print( "_, ");
+				else
+					System.out.print(target[xi][yi] + ", ");
+            }
+			System.out.println();
+        }
+		System.out.println("---------------------");
+	}
 
     private int[][] getMinDistanceMap(char targetType){
         //this returns a map consistenting MinDistance Information for the current board
@@ -58,7 +73,7 @@ public class StateHelper {
 
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
 		calMinDistance(mdMap, queens, 1);
-		
+		printMatrix(mdMap);
         return mdMap;
     }
 
