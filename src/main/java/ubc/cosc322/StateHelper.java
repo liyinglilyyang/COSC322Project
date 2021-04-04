@@ -29,6 +29,7 @@ public class StateHelper {
         //this should invoke getMinDistanceMap() for comparison
 		int[][] pm = getMinDistanceMap(playerType);
 		int[][] om = getMinDistanceMap(opType);
+
 		int utility = 0;
 		for(int yi = 10; yi >=1; yi--){
             for(int xi = 1; xi <=10; xi++){
@@ -57,16 +58,30 @@ public class StateHelper {
 
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
 		calMinDistance(mdMap, queens, 1);
+		
         return mdMap;
     }
 
 	private void calMinDistance(int[][] mdMap, ArrayList<Coor> queens, int distance){
-		ArrayList<Coor> queue = new ArrayList<Coor>();
+		boolean updated = false;
 		for(Action a: getAllActions(queens)){
-			queue.add(a.getDe());//insert all possible destination position to the queue
 			if(mdMap[a.getDe().getX()][a.getDe().getY()] > distance){//update min distance if the orginal one is larger
 				mdMap[a.getDe().getX()][a.getDe().getY()] = distance;
+				updated = true;
 			}
+		}
+		
+		if(updated){
+			ArrayList<Coor> queue = new ArrayList<Coor>();
+			for(int yi = 10; yi >=1; yi--){
+				for(int xi = 1; xi <=10; xi++){
+					if(mdMap[xi][yi] == distance){
+						Coor newQueen = new Coor(xi, yi);
+						queue.add(newQueen);
+					}
+				}
+			}
+			calMinDistance(mdMap, queue, distance+1);
 		}
 	}
 
