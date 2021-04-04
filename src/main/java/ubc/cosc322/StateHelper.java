@@ -25,7 +25,7 @@ public class StateHelper {
     }
 
     public int getUtility(){
-        //this returns the current Utility
+		//this returns the current Utility
         //this should invoke getMinDistanceMap() for comparison
 		int[][] pm = getMinDistanceMap(playerType);
 		int[][] om = getMinDistanceMap(opType);
@@ -49,18 +49,24 @@ public class StateHelper {
 
     private int[][] getMinDistanceMap(char targetType){
         //this returns a map consistenting MinDistance Information for the current board
-		int[][] minDistanceMap = new int[11][11];
+		int[][] minDistanceMap = new int[11][11];//a matrix for min distance
+		ArrayList<Coor> queue = new ArrayList<Coor>();
+		for(Action a: getAllActions(targetType)){
+			queue.add(a.getDe());//insert all possible destination position to the queue
+			
+		}
+
 		for(int yi = 10; yi >=1; yi--){
             for(int xi = 1; xi <=10; xi++){
-                
+
             }
         }
 		
         return minDistanceMap;
     }
 
-    public ArrayList<Action> getAllActions(){
-		ArrayList<Coor> queens = suggestedMap.getState(playerType);
+    private ArrayList<Action> getAllActions(char targetType){
+		ArrayList<Coor> queens = suggestedMap.getState(targetType);
 		ArrayList<Action> allActions = new ArrayList<Action>();
 		for(Coor queen: queens)
 			allActions.addAll(getActions(queen));
