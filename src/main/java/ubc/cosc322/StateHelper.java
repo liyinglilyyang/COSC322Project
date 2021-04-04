@@ -49,26 +49,28 @@ public class StateHelper {
 
     private int[][] getMinDistanceMap(char targetType){
         //this returns a map consistenting MinDistance Information for the current board
-		int[][] minDistanceMap = new int[11][11];//a matrix for min distance
-		ArrayList<Coor> queue = new ArrayList<Coor>();
-		ArrayList<Coor> queens = suggestedMap.getState(targetType);
-		for(Action a: getAllActions(queens)){
-			queue.add(a.getDe());//insert all possible destination position to the queue
-			minDistanceMap[a.getDe().getX()][a.getDe().getY()] = 1;//set min distance to 1, since they can be reached in 1 step
-		}
-
-		while(!queue.isEmpty()){
-			
-		}
-
+		int[][] mdMap = new int[11][11];//a matrix for min distance
 		for(int yi = 10; yi >=1; yi--){
             for(int xi = 1; xi <=10; xi++){
-
+				mdMap[xi][yi] = 99;//set all distance to 99(MAX)
             }
         }
+
+		ArrayList<Coor> queens = suggestedMap.getState(targetType);
+		calMinDistance(mdMap, queens, 1);
 		
-        return minDistanceMap;
+        return mdMap;
     }
+
+	private void calMinDistance(int[][] mdMap, ArrayList<Coor> queens, int distance){
+		ArrayList<Coor> queue = new ArrayList<Coor>();
+		for(Action a: getAllActions(queens)){
+			queue.add(a.getDe());//insert all possible destination position to the queue
+			if(mdMap[a.getDe().getX()][a.getDe().getY()] > distance){//update min distance if the orginal one is larger
+				mdMap[a.getDe().getX()][a.getDe().getY()] = distance;
+			}
+		}
+	}
 
     private ArrayList<Action> getAllActions(char targetType){
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
