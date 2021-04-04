@@ -27,8 +27,24 @@ public class StateHelper {
     public int getUtility(){
         //this returns the current Utility
         //this should invoke getMinDistanceMap() for comparison
-		
-        return 0;
+		int[][] pm = getMinDistanceMap(playerType);
+		int[][] om = getMinDistanceMap(opType);
+
+		int utility = 0;
+		for(int yi = 10; yi >=1; yi--){
+            for(int xi = 1; xi <=10; xi++){
+                if(pm[xi][yi] == om[xi][yi]){
+					//do nothing
+				}else if(pm[xi][yi] == -1 || pm[xi][yi] > om[xi][yi]){
+					utility--;
+				}else if(om[xi][yi] == -1 || pm[xi][yi] > om[xi][yi]){
+					utility++;
+				}else{
+					System.out.println("Error in utility calculation: " + pm[xi][yi] + ", " + om[xi][yi]);
+				}
+            }
+        }
+        return utility;
     }
 
     private int[][] getMinDistanceMap(char targetType){
