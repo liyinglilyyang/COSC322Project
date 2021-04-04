@@ -29,7 +29,6 @@ public class StateHelper {
         //this should invoke getMinDistanceMap() for comparison
 		int[][] pm = getMinDistanceMap(playerType);
 		int[][] om = getMinDistanceMap(opType);
-
 		int utility = 0;
 		for(int yi = 10; yi >=1; yi--){
             for(int xi = 1; xi <=10; xi++){
@@ -58,7 +57,6 @@ public class StateHelper {
 
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
 		calMinDistance(mdMap, queens, 1);
-		
         return mdMap;
     }
 

@@ -25,5 +25,8 @@ public class StateHelperTest {
             }
         }
         System.out.println(testBoard);
+
+        StateHelper sh = new StateHelper(testBoard,'B');
+        System.out.println(sh.getUtility());
     }
 }
