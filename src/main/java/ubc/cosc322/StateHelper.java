@@ -2,7 +2,7 @@ package ubc.cosc322;
 
 import java.util.ArrayList;
 
-public class UtilityCalculator {
+public class StateHelper {
     public NewState suggestedMap;
     private char playerType;
     private char opType;
@@ -41,7 +41,7 @@ public class UtilityCalculator {
 
 		for(int di = 0; di < 8; di++){
 			int step = 1;
-			while(hasValidAction(queen,step,di,oneQueenMap)){
+			while(hasValidAction(queen,step,di,suggestedMap)){
 				actions.add(new Action(queen,step,di));
 				step++;
 			}
