@@ -169,10 +169,6 @@ public class COSC322Test extends GamePlayer{
 			makeMove(playerType);
     		long endTime=System.currentTimeMillis();
         	System.out.println("Run time: "+(endTime-startTime)+"ms-----------------------------------------------");
-		
-			
-			
-			
     	}
     	
     	return true;   	
@@ -198,25 +194,16 @@ public class COSC322Test extends GamePlayer{
 	public void connect() {
     	gameClient = new GameClient(userName, passwd, this);			
 	}
-	
-	
+
 	//----------------------implementation func--------------------------------------
-	
-	
 	// run time task
 	public void runTimeTask(char playerType) {
 		TimerTask task = new TimerTask() {
-	        public void run() {
-	        	
-	        	// alogrithm runs here
-	    	    // alphaBeta
-	        	
+	        public void run() {      	
 	            System.out.println("Time almost running out, perform an emerent move.");
 	            makeEmerMove(playerType);
 	        }
 	    };
-	    
-	    
 	    
 		Timer timer = new Timer("Timer");
 	    
@@ -225,15 +212,7 @@ public class COSC322Test extends GamePlayer{
 	    // showmsg(timer);// minimax goes here with one more para timer
 	    
 	}
-	
-	// // test function to cancel the timer 
-	// public void showmsg(Timer timer) {
-	// 	System.out.println("timer is terminated.");
-	// 	timer.cancel();
-	// }
-	
-	
-	
+
 	// make decision and send move message
 	public void makeMove(char playerType) {
 		// minimax = alphaBetaSearch();
@@ -306,43 +285,8 @@ public class COSC322Test extends GamePlayer{
 			System.out.println(decide.getOr());
 			System.out.println(decide.getDe());
 		}
-		//ArrowP contains all the possible actions
-		// Action bestArrow = ArrowP.get(0);
-		// int bestActions = getAllActions(creatHypotheticalMap(s, randomAction,bestArrow.getDe()), playerType).size();
-
-		// for(Action a: ArrowP){
-		// 	int currentSize = getAllActions(creatHypotheticalMap(s, randomAction, a.getDe()), playerType).size();
-
-		// 	System.out.println("the current random action number available is: " + currentSize);
-		// 	if(currentSize<bestActions){
-		// 		//we've found a better arrow position, so we update
-		// 		bestArrow = a;
-		// 		bestActions = currentSize;
-		// 	}
-		// }
-		// this generates a random action at index namely j
 		int j = (int)(ArrowP.size()*Math.random());
 		updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
-
-		// updateAction(randomAction.getOr(), randomAction.getDe(), bestArrow.getDe());
-
-		// if(randomAction.getDe().equals(bestArrow.getOr()))
-		// 	System.out.println("This is a valid arrow shooting action!");
-
-		// for(Coor currentQueen : queens){//the first queen
-		// 	for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
-		// 		int testStep = 1;//we always try step one
-		// 		//notice that if 1 is impossible, then we do not need to proceed either
-		// 		if(makeAction(currentQueen,testStep,testDirection)){
-		// 			System.out.println("****Player Type: " + playerType);
-		// 			System.out.println("****CurrentObject: " + currentQueen.getX() + "," + currentQueen.getY() );
-		// 			int[] currentD = actionList[testDirection];
-		// 			System.out.println("****Test Direction"+ currentD.toString() +"****Test Step"+testStep);
-		// 			return;
-		// 		}
-					
-		// 	}
-		// }
 	}
 	
 	public int findUtility(NewState suggestedGameBoard){
@@ -472,83 +416,6 @@ public class COSC322Test extends GamePlayer{
 		return hm;
 	}
 
-	// calculate min-distance  function
-	public void calMinDis(ArrayList<Coor> queens, char playerType, int step) {
-		if(step == 1) {//start with four queens we have on board
-			queens = s.getState(playerType);
-		}
-			
-		for(Coor currentQueen : queens) {
-			for(int testDirection = 0; testDirection<7; testDirection++){//for each direction at each step
-				ArrayList<Coor> tmpQueue = new ArrayList<Coor>();// crate a tmp array for storing step ith movable tile at one direction
-				int count = 1;
-				while (hasValidAction(currentQueen, count, testDirection)){//same direction, go as far as possible by increasing count
-					int[] currentAction = actionList[testDirection];//store each blank tile with steps value
-					int targetX = currentQueen.getX()+currentAction[0];
-					int targetY = currentQueen.getY()+currentAction[1];
-					Coor targetQueen = new Coor(targetX, targetY);
-					tmpQueue.add(targetQueen);//used for recursive call go further step
-						
-					if (playerType == 'B' && step<targetQueen.getBlackDis()) {//only update for a shorter distance
-						targetQueen.setBlackDis(step);
-					}else if(playerType == 'W' && step<targetQueen.getWhiteDis()) {
-						targetQueen.setWhiteDis(step);
-					}
-					count++;	
-				}
-				calMinDis(tmpQueue, playerType, step++);
-					
-			}
-		}
-			
-	}
-	
-	//showing MinDis board (debug usage)
-	 public String showMinDisBoard(Coor[][] gameBoard, char playerType){
-	        String r = "";
-	        for(int yi = 10; yi >=1; yi--){
-	            for(int xi = 1; xi <=10; xi++){
-	                if(playerType == 'B') {
-	                	r += gameBoard[xi][yi].getBlackDis() + ", ";  
-	                }else if (playerType == 'W') {
-	                	r += gameBoard[xi][yi].getWhiteDis() + ", "; 
-	                }
-	            }
-	            r+="\n";
-	        }
-	        return r;
-	                
-	 }
-	
-	// calculate heuristic value
-	public void calHeuristic(NewState s, char playerType) {
-		ArrayList<Coor> availableCoor = s.getAvailableCoordinates();//get all available tiles
-		
-		for (Coor co: availableCoor) {
-			if (co.getBlackDis() < co.getWhiteDis()) {//if blackDis < whiteDis and we are black, utility +1
-				utility = playerType == 'B' ? utility+1 : utility-1;
-			}else if (co.getBlackDis() > co.getWhiteDis()) {//else, otherwise
-				utility = playerType == 'B' ? utility-1 : utility+1;
-			}
-		}
-	}
-	
-	
-	// test if we have visited all neibor at currentLocation
-	public boolean isVisitedAll(Coor currentLocation) {
-		boolean isVisited = false;
-		for(int testDirection = 0; testDirection<7; testDirection++){//test all directions
-			if(hasValidAction(currentLocation,1,testDirection)){
-				//System.out.println("****This tile still has neighbors");//(debug usage)
-				isVisited = false;
-			}else {
-				isVisited = true;
-			}
-				
-		}
-		return isVisited;
-	}
-	
 	// move function, will only move one tile at valid direction (legacy) 
 	public boolean makeAction(Coor ori, int step, int direction){
 		//notice that we always shoot to where we started

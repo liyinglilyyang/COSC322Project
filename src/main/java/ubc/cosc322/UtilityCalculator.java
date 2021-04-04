@@ -1,5 +1,7 @@
 package ubc.cosc322;
 
+import java.util.ArrayList;
+
 public class UtilityCalculator {
     public NewState suggestedMap;
     private char playerType;
@@ -22,6 +24,30 @@ public class UtilityCalculator {
         return new NewState();
     }
 
+    public ArrayList<Action> getAllActions(){
+		ArrayList<Coor> queens = suggestedMap.getState(playerType);
+		ArrayList<Action> allActions = new ArrayList<Action>();
+		for(Coor queen: queens)
+			allActions.addAll(getActions(queen));
+		return allActions;
+	}
+
+    public ArrayList<Action> getActions(Coor queen){
+		ArrayList<Action> actions = new ArrayList<Action>();
+		//for all directions
+		//while a step is available, go into it
+		// System.out.println("We are now printing one instance of a one queen map");
+		// System.out.println(oneQueenMap);
+
+		for(int di = 0; di < 8; di++){
+			int step = 1;
+			while(hasValidAction(queen,step,di,oneQueenMap)){
+				actions.add(new Action(queen,step,di));
+				step++;
+			}
+		}
+		return actions;
+	}
 
     public NewState CopyMap(NewState Ori){
         //we want to create an *identical* copy of a map
@@ -47,6 +73,7 @@ public class UtilityCalculator {
 	}
 
     private boolean hasValidAction(Coor ori, int step, int direction, NewState suggestedGameMap){
+        int[][] actionList ={{-1, 0},{-1, -1},{-1, 1},{0, -1},{0, 1},{1, 0},{1, -1},{1, 1}};	
 		int[] currentAction = actionList[direction];
 		int targetX = ori.getX()+currentAction[0]*step;
 		int targetY = ori.getY()+currentAction[1]*step;
