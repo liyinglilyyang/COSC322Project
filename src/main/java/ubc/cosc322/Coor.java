@@ -2,8 +2,7 @@ package ubc.cosc322;
 
 public class Coor {
 	private int x,y;
-	private char type, owned;
-	private int blackDis,whiteDis;
+	private char type;
 	private int index;
 	
 	// Constructor 
@@ -11,9 +10,6 @@ public class Coor {
 		this.x = x;
 		this.y = y;
 		this.type = type;//A for arrow, B for black, W for White, N for None
-		this.owned = 'N';//B for black, W for White, N for None
-		this.blackDis = 999;//set initial value to positive infinite (or Integer.MAX_VALUE)
-		this.whiteDis = 999;
 		this.index = -1;
 	}
 	
@@ -64,17 +60,17 @@ public class Coor {
 		this.type = type;
 	}
 	
-	public void setBlackDis(int dis){
-		this.blackDis = dis;
-	}
+	// public void setBlackDis(int dis){
+	// 	this.blackDis = dis;
+	// }
 	
-	public void setWhiteDis(int dis){
-		this.whiteDis = dis;
-	}
+	// public void setWhiteDis(int dis){
+	// 	this.whiteDis = dis;
+	// }
 	
-	public void setOwned(char type){
-		this.owned = type;
-	}
+	// public void setOwned(char type){
+	// 	this.owned = type;
+	// }
 	
 	public void setIndex(int index){
 		this.index = index;
@@ -99,17 +95,17 @@ public class Coor {
 		return type;
 	}
 	
-	public int getBlackDis() {
-		return blackDis;
-	}
+	// public int getBlackDis() {
+	// 	return blackDis;
+	// }
 	
-	public int getWhiteDis() {
-		return whiteDis;
-	}
+	// public int getWhiteDis() {
+	// 	return whiteDis;
+	// }
 
-	public int getOwned() {
-		return owned;
-	}
+	// public int getOwned() {
+	// 	return owned;
+	// }
 
 
 	
