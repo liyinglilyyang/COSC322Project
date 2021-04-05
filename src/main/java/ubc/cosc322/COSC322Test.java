@@ -148,6 +148,7 @@ public class COSC322Test extends GamePlayer{
 			//newly added 
 			// updateBoard(QueenOri, QueenNew, arrowNew);
 			System.out.println("Start Run---------------------------------------------");
+			
 			long startTime=System.currentTimeMillis();
     		Coor Ori_Position = new Coor(QueenOri.get(1), QueenOri.get(0));
     		Coor New_Position = new Coor(QueenNew.get(1), QueenNew.get(0));
@@ -155,17 +156,11 @@ public class COSC322Test extends GamePlayer{
     		System.out.println(Ori_Position);
 			System.out.println(New_Position);
 			System.out.println(Arrow_Position);
-
+			ErrorChecker ec = new ErrorChecker(Ori_Position, New_Position, Arrow_Position);
+			ec.updateValid();
     		// update state and arrowboard
     		this.s.updateState(Ori_Position, New_Position);
     		this.s.setCoor(Arrow_Position);
-    		
-    		// calMinDis(this.s.getState(playerType), this.playerType, this.counter);
-    		// System.out.println(showMinDisBoard(this.s.getState(), this.playerType));//print out mindis board
-    		//System.out.println("oripost is " + Ori_Position.getCoor()[0]);
-    		// ++this.counter;
-    		// this.runTimeTask(this.playerType);
-    		// makeEmerMove(playerType);
 			makeMove(playerType);
     		long endTime=System.currentTimeMillis();
         	System.out.println("Run time: "+(endTime-startTime)+"ms-----------------------------------------------");
@@ -275,23 +270,29 @@ public class COSC322Test extends GamePlayer{
 	// send move msg to server
 	public void updateAction(Coor op, Coor np, Coor ap){
 		System.out.println("We are now updating actions");//we update state object information
-		s.updateState(op, np);//move Amazons to new position
-		s.setCoor(ap,'A');//update Arrow on board
-		System.out.println(s);//print state
-		//now we prepare information to send to the server
-		ArrayList <Integer> moveQueenOri = new ArrayList <Integer>();//{{op.getX();op.getY();}}
-		ArrayList <Integer> moveQueenNew = new ArrayList <Integer>();//{{np.getX();np.getY();}}
-		ArrayList <Integer> movearrowNew = new ArrayList <Integer>();//{{ap.getX();ap.getY();}}
-		//update y
-		moveQueenOri.add(op.getY());
-		moveQueenNew.add(np.getY());
-		movearrowNew.add(ap.getY());
-		//update x
-		moveQueenOri.add(op.getX());
-		moveQueenNew.add(np.getX());
-		movearrowNew.add(ap.getX());
-		gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
-		getGameGUI().updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
+		ErrorChecker ec = new ErrorChecker(op, np, ap);
+		if(ec.updateValid()){
+			s.updateState(op, np);//move Amazons to new position
+			s.setCoor(ap,'A');//update Arrow on board
+			System.out.println(s);//print state
+			//now we prepare information to send to the server
+			ArrayList <Integer> moveQueenOri = new ArrayList <Integer>();//{{op.getX();op.getY();}}
+			ArrayList <Integer> moveQueenNew = new ArrayList <Integer>();//{{np.getX();np.getY();}}
+			ArrayList <Integer> movearrowNew = new ArrayList <Integer>();//{{ap.getX();ap.getY();}}
+			//update y
+			moveQueenOri.add(op.getY());
+			moveQueenNew.add(np.getY());
+			movearrowNew.add(ap.getY());
+			//update x
+			moveQueenOri.add(op.getX());
+			moveQueenNew.add(np.getX());
+			movearrowNew.add(ap.getX());
+			gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
+			getGameGUI().updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
+		}else{
+			System.out.println("Error! Handle From Here");
+		}
+
 	}
 
 
