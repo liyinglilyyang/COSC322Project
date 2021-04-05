@@ -19,7 +19,7 @@ public class MiniMax {
     }
 
     public int maxValue(NewState state, int al, int be, int level){
-        System.out.println("The current level is: " + level);
+        // System.out.println("The current level is: " + level);
         if(level == 1)
             return maxUtility(state, playerType);
         else{
@@ -42,7 +42,7 @@ public class MiniMax {
     }
 
     public int minValue(NewState state, int al, int be, int level){
-        System.out.println("The current level is: " + level);
+        // System.out.println("The current level is: " + level);
         if(level == 1)
             return maxUtility(state, opType)*-1;//not sure if we want to change it
         else{
@@ -121,7 +121,11 @@ public class MiniMax {
                 actionList.add(a);
         }
         if(actionList.isEmpty()){
-            System.out.println("Unexpected Case: Aciton with suggested utility unfound！");
+            System.out.println("------------Warning---------------");
+            System.out.println(currentSuggestedMap);
+            System.out.println("------------Warning---------------");
+            System.out.println("Unexpected Case: Aciton with suggested utility of "+suggestedUtility+" unfound！");
+            System.out.println("The max utility possible is: " + maxUtility(currentSuggestedMap,playerType));
             return null;
         }else{
             System.out.println("The Size of the available action list is : "+ actionList.size());

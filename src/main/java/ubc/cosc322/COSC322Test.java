@@ -224,15 +224,23 @@ public class COSC322Test extends GamePlayer{
 	
 	// make emergent move
 	public void makeEmerMove(char playerType) {
-		if(s.getState('N').size()> 50){
-			//------------------------------
+		int availableSpace  = s.getState('N').size();
+		if(availableSpace> 70){
 			System.out.println("Early");
 			alphaBetaPruning(new MiniMax(s,playerType,1));
-			//------------------------------
+		}else if(availableSpace>50){
+			System.out.println("Stage 50");
+			alphaBetaPruning(new MiniMax(s,playerType,3));
+		}else if(availableSpace>30){
+			System.out.println("Stage 30");
+			alphaBetaPruning(new MiniMax(s,playerType,5));
+		}else if(availableSpace>20){
+			System.out.println("Stage 20");
+			alphaBetaPruning(new MiniMax(s,playerType,7));
 		}else{
 			System.out.println("End Game");
 			//------------------------------
-			alphaBetaPruning(new MiniMax(s,playerType,6));
+			alphaBetaPruning(new MiniMax(s,playerType,50));
 			//------------------------------
 		}
 

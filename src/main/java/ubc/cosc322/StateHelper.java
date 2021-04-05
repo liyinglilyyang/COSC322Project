@@ -25,7 +25,11 @@ public class StateHelper {
     }
 
 	public boolean terminalState(){
-        return terminalState('B') || terminalState('W');
+		boolean t = terminalState('B') || terminalState('W');
+		if(t){
+			System.out.println("We have reached a terminal state");
+		}
+        return t;
     }
 
     public boolean terminalState(char currentPlayerType){
