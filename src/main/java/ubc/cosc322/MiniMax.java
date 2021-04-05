@@ -13,7 +13,7 @@ public class MiniMax {
     private int level;
 
     public MiniMax(NewState suggestedMap, char playerType, int level){
-        this.suggestedMap =CopyMap(suggestedMap);
+        this.suggestedMap = StateHelper.CopyMap(suggestedMap);
         this.playerType = playerType;
         this.opType = playerType == 'B' ? 'W':'B';//we assign the opType to be different form player type
         this.level = level;

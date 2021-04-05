@@ -100,7 +100,7 @@ public class StateHelper {
 		}
 	}
 
-    private ArrayList<Action> getAllActions(char targetType){
+    public ArrayList<Action> getAllActions(char targetType){
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
 		ArrayList<Action> allActions = new ArrayList<Action>();
 		for(Coor queen: queens)
@@ -108,7 +108,7 @@ public class StateHelper {
 		return allActions;
 	}
 
-	private ArrayList<Action> getAllActions(ArrayList<Coor> queens){
+	public ArrayList<Action> getAllActions(ArrayList<Coor> queens){
 		ArrayList<Action> allActions = new ArrayList<Action>();
 		for(Coor queen: queens)
 			allActions.addAll(getActions(queen));
@@ -132,7 +132,7 @@ public class StateHelper {
 		return actions;
 	}
 
-    public NewState CopyMap(NewState Ori){
+    public static NewState CopyMap(NewState Ori){
         //we want to create an *identical* copy of a map
         //but we do not want this new copy to share the same memory space (so they are different *objects*)
 		NewState hm = new NewState('N');
