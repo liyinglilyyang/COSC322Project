@@ -45,9 +45,33 @@ public class MiniMax {
         return maxUtility;
     }
 
-    public int getMaxArrow(Action a){
-        
+    public int getMaxArrow(NewState map){
+        int maxArrow = -99;
+        StateHelper arrowsh = new StateHelper(map, playerType);
+        for(Action a: arrowsh.getAllActions(playerType)){
+            int arrowUtility = new StateHelper(createHypotheticalMap(map, a), playerType).getUtility();
+            if(arrowUtility > maxArrow){
+                maxArrow = arrowUtility;
+            }
+        }
         return 0;
+    }
+
+    public Action findArrowWithUtility(NewState map, int arrowUtility){
+        StateHelper sh = new StateHelper(map, playerType);
+        ArrayList<Action> arrowActions = new ArrayList<Action>();
+        for(Action a: sh.getAllActions(playerType)){
+            int hUtility = new StateHelper(createHypotheticalMap(map, a), playerType).getUtility();
+            if (hUtility == arrowUtility)
+                arrowActions.add(a);
+        }
+        if(arrowActions.isEmpty()){
+            System.out.println("Unexpected Case: arrow action with suggested arrow utility unfound！");
+            return null;
+        }else{
+            System.out.println("The size of the available arrow action list is : "+ arrowActions.size());
+            return arrowActions.get((int)(Math.random()*arrowActions.size()));
+        }
     }
 
     public NewState createHypotheticalMap(NewState Ori, Action a){
@@ -68,7 +92,7 @@ public class MiniMax {
 
     public NewState createHypotheticalMap(NewState Ori, Coor arrow){
         NewState hMap = StateHelper.CopyMap(Ori);
-
+        hMap.getCoor(arrow).setCoorType('A');
         return hMap;
     }
 
