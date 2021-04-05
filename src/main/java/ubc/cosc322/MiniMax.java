@@ -28,19 +28,4 @@ public class MiniMax {
         
         return 0;
     }
-
-
-    public NewState CopyMap(NewState Ori){
-        //we want to create an *identical* copy of a map
-        //but we do not want this new copy to share the same memory space (so they are different *objects*)
-		NewState hm = new NewState('N');
-		Coor[][] ori = Ori.getState();
-		for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-				hm.setCoor(ori[xi][yi]);
-            }
-        }
-		System.out.println(hm);
-		return hm;
-	}
 }
