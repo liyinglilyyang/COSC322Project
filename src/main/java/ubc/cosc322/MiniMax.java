@@ -25,7 +25,11 @@ public class MiniMax {
     }
 
     public boolean terminalState(NewState currentGameState, char currentPlayerType){
-        
+        StateHelper currentSH = new StateHelper(currentGameState, currentPlayerType);
+        if(currentSH.getAllActions(currentPlayerType).size() == 0){
+            return true;
+        }
+        return false;
     }
 
     public MiniMax(NewState suggestedMap, char playerType, int level){
