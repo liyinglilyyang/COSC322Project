@@ -6,7 +6,32 @@ import java.util.TimerTask;
 import ygraph.ai.smartfox.games.BaseGameGUI;
 import ygraph.ai.smartfox.games.GameClient;
 
-public class TimerTest {
+public class TimerTest implements Runnable{
+
+    private boolean doStop = false;
+
+    public synchronized void doStop() {
+        this.doStop = true;
+    }
+
+    private synchronized boolean keepRunning() {
+        return this.doStop == false;
+    }
+
+    @Override
+    public void run() {
+        while(keepRunning()) {
+            // keep doing what this thread should do.
+            System.out.println("Running");
+
+            try {
+                Thread.sleep(1L * 1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
     // Timer timer;
     // NewState s;
     // GameClient gc;

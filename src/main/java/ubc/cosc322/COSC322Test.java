@@ -87,20 +87,6 @@ public class COSC322Test extends GamePlayer{
     	//and implement the method getGameGUI() accordingly
     	this.gamegui = new BaseGameGUI(this);
     }
-	class Reminder{
-		Timer timer;
-		public Reminder(int seconds) {
-			timer = new Timer();
-			timer.schedule(new RemindTask(), seconds*1000);
-		}
-		class RemindTask extends TimerTask {
-			public void run() {
-				System.out.println("Time's up!");
-				alphaBetaPruning(new MiniMax(s,playerType,2));
-				timer.cancel(); //Terminate the timer thread
-			}
-		}
-	}
 
     @Override
     public void onLogin() {
@@ -179,8 +165,6 @@ public class COSC322Test extends GamePlayer{
 			}else{
 				System.out.println("We win.");
 			}
-				
-			
     	}
     	
     	return true;   	
@@ -233,30 +217,26 @@ public class COSC322Test extends GamePlayer{
 
 		// makeAction();
 		// makeEmerMove(playerType);
-		System.out.println("Timer Start");
-		Reminder p = new Reminder(25);
-		System.out.println("Normal Method Start");
 
 		int availableSpace  = s.getState('N').size();
 		if(availableSpace> 70){
 			System.out.println("Early");
 			alphaBetaPruning(new MiniMax(s,playerType,2));
-		}else if(availableSpace>50){
-			System.out.println("Stage 50");
-			alphaBetaPruning(new MiniMax(s,playerType,6));
+		}else if(availableSpace>45){
+			System.out.println("Stage 45");
+			alphaBetaPruning(new MiniMax(s,playerType,3));
 		}else if(availableSpace>30){
 			System.out.println("Stage 30");
 			alphaBetaPruning(new MiniMax(s,playerType,5));
 		}else if(availableSpace>25){
 			System.out.println("Stage 20");
-			alphaBetaPruning(new MiniMax(s,playerType,12));
+			alphaBetaPruning(new MiniMax(s,playerType,10));
 		}else{
 			System.out.println("End Game");
 			
 			alphaBetaPruning(new MiniMax(s,playerType,12));
 		}
 
-		p.timer.cancel();
 		// tT.timer.cancel();
 	}
 
