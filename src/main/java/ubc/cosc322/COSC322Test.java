@@ -50,7 +50,6 @@ public class COSC322Test extends GamePlayer{
 	
 	// utility
 	int utility = 0;
-	
     /**
      * The main method
      * @param args for name and passwd (current, any string would work)
@@ -87,9 +86,22 @@ public class COSC322Test extends GamePlayer{
     	//To make a GUI-based player, create an instance of BaseGameGUI
     	//and implement the method getGameGUI() accordingly
     	this.gamegui = new BaseGameGUI(this);
-    	
     }
- 
+	class Reminder{
+		Timer timer;
+		public Reminder(int seconds) {
+			timer = new Timer();
+			timer.schedule(new RemindTask(), seconds*1000);
+		}
+		class RemindTask extends TimerTask {
+			public void run() {
+				System.out.println("Time's up!");
+				alphaBetaPruning(new MiniMax(s,playerType,2));
+				timer.cancel(); //Terminate the timer thread
+			}
+		}
+	}
+
     @Override
     public void onLogin() {
     	System.out.println("Congratualations!!! Login successfully");
@@ -197,82 +209,64 @@ public class COSC322Test extends GamePlayer{
 
 	//----------------------implementation func--------------------------------------
 	// run time task
-	public void runTimeTask(char playerType) {
-		TimerTask task = new TimerTask() {
-	        public void run() {      	
-	            System.out.println("Time almost running out, perform an emerent move.");
-	            makeEmerMove(playerType);
-	        }
-	    };
+	// public void runTimeTask(char playerType) {
+	// 	TimerTask task = new TimerTask() {
+	//         public void run() {      	
+	//             System.out.println("Time almost running out, perform an emerent move.");
+	//             // makeEmerMove(playerType);
+	//         }
+	//     };
 	    
-		Timer timer = new Timer("Timer");
+	// 	Timer timer = new Timer("Timer");
 	    
-	    long delay = 1000L;// second * 1000
-	    timer.schedule(task, delay);
-	    // showmsg(timer);// minimax goes here with one more para timer
+	//     long delay = 1000L;// second * 1000
+	//     timer.schedule(task, delay);
+	//     // showmsg(timer);// minimax goes here with one more para timer
 	    
-	}
+	// }
 
 	// make decision and send move message
 	public void makeMove(char playerType) {
 		// minimax = alphaBetaSearch();
-		
+
+		// TimerTest tT = new TimerTest(25, s, this.getGameClient(), this.getGameGUI(), playerType);
+
 		// makeAction();
-		makeEmerMove(playerType);
-	}
-	
-	
-	// make emergent move
-	public void makeEmerMove(char playerType) {
+		// makeEmerMove(playerType);
+		System.out.println("Timer Start");
+		Reminder p = new Reminder(25);
+		System.out.println("Normal Method Start");
+
 		int availableSpace  = s.getState('N').size();
 		if(availableSpace> 70){
 			System.out.println("Early");
-			alphaBetaPruning(new MiniMax(s,playerType,1));
+			alphaBetaPruning(new MiniMax(s,playerType,2));
 		}else if(availableSpace>50){
 			System.out.println("Stage 50");
-			alphaBetaPruning(new MiniMax(s,playerType,3));
+			alphaBetaPruning(new MiniMax(s,playerType,6));
 		}else if(availableSpace>30){
 			System.out.println("Stage 30");
 			alphaBetaPruning(new MiniMax(s,playerType,5));
-		}else if(availableSpace>20){
+		}else if(availableSpace>25){
 			System.out.println("Stage 20");
-			alphaBetaPruning(new MiniMax(s,playerType,7));
+			alphaBetaPruning(new MiniMax(s,playerType,12));
 		}else{
 			System.out.println("End Game");
-			//------------------------------
-			alphaBetaPruning(new MiniMax(s,playerType,50));
-			//------------------------------
+			
+			alphaBetaPruning(new MiniMax(s,playerType,12));
 		}
 
-		// updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
+		p.timer.cancel();
+		// tT.timer.cancel();
 	}
 
 	public void alphaBetaPruning(MiniMax helper){
-		Action bestAction = helper.alphaBetaSearch();
-		System.out.println("Action is: " + bestAction + "Now we find arrow");
-		Coor arrowPosition = helper.findArrowWithUtility(bestAction,helper.getMaxArrow(bestAction)).getDe();
-		updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
-	}
+        Action bestAction = helper.alphaBetaSearch();
+        System.out.println("Action is: " + bestAction + "Now we find arrow");
+        Coor arrowPosition = helper.findArrowWithUtility(bestAction,helper.getMaxArrow(bestAction,playerType)).getDe();
+        updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
+    }
 
-
-
-	// // move function, will only move one tile at valid direction (legacy) 
-	// public boolean makeAction(Coor ori, int step, int direction){
-	// 	//notice that we always shoot to where we started
-	// 	if(hasValidAction(ori,step,direction)){
-	// 		int[] currentAction = actionList[direction];
-	// 		Coor op = ori;
-	// 		Coor np = s.getCoor(ori.getX()+currentAction[0],ori.getY()+currentAction[1]);
-	// 		Coor ap = new Coor(op.getX(),op.getY(),'A');// always shoot to ori, for test purpose
-	// 		updateAction(op,np,ap);
-	// 		return true;
-	// 	}else
-	// 		return false;
-
-	// 	// return s.getType(ori.getY()+currentAction[0], ori.getX()+currentAction[1]) == 'N';
-	// }
-
-	// send move msg to server
 	public void updateAction(Coor op, Coor np, Coor ap){
 		System.out.println("We are now updating actions");//we update state object information
 		ErrorChecker ec = new ErrorChecker(op, np, ap);
@@ -299,6 +293,5 @@ public class COSC322Test extends GamePlayer{
 		}
 
 	}
-
 
 }//end of class

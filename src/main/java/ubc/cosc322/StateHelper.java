@@ -27,7 +27,7 @@ public class StateHelper {
 	public boolean terminalState(){
 		boolean t = terminalState('B') || terminalState('W');
 		if(t){
-			System.out.println("We have reached a terminal state");
+			// System.out.println("We have reached a terminal state");
 		}
         return t;
     }
