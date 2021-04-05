@@ -9,12 +9,14 @@ public class TestGameSystemHelper {
     NewState s;
     private GameClient gameClient = null; 
     private BaseGameGUI gamegui = null;
-    public TestGameSystemHelper(NewState s, GameClient gameClient,BaseGameGUI gamegui){
+    char playerType;
+    public TestGameSystemHelper(NewState s, GameClient gameClient,BaseGameGUI gamegui, char playerType){
         this.s = s;
         this.gameClient = gameClient;
         this.gamegui = gamegui;
+        this.playerType = playerType;
     }
-    
+
     public void updateAction(Coor op, Coor np, Coor ap){
 		System.out.println("We are now updating actions");//we update state object information
 		ErrorChecker ec = new ErrorChecker(op, np, ap);
@@ -34,11 +36,17 @@ public class TestGameSystemHelper {
 			moveQueenOri.add(op.getX());
 			moveQueenNew.add(np.getX());
 			movearrowNew.add(ap.getX());
-			gCl.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
-			GUI.updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
+			gameClient.sendMoveMessage(moveQueenOri, moveQueenNew, movearrowNew);//send message to game client
+			gamegui.updateGameState(moveQueenOri, moveQueenNew, movearrowNew);//update gui
 		}else{
 			System.out.println("Error! Handle From Here");
 		}
 
 	}
+    public void abp(MiniMax helper){
+        Action bestAction = helper.alphaBetaSearch();
+        System.out.println("Action is: " + bestAction + "Now we find arrow");
+        Coor arrowPosition = helper.findArrowWithUtility(bestAction,helper.getMaxArrow(bestAction,playerType)).getDe();
+        updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
+    }
 }

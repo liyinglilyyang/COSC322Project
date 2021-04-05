@@ -217,25 +217,26 @@ public class COSC322Test extends GamePlayer{
 
 		// makeAction();
 		// makeEmerMove(playerType);
-
-		int availableSpace  = s.getState('N').size();
-		if(availableSpace> 70){
-			System.out.println("Early");
-			alphaBetaPruning(new MiniMax(s,playerType,2));
-		}else if(availableSpace>45){
-			System.out.println("Stage 45");
-			alphaBetaPruning(new MiniMax(s,playerType,3));
-		}else if(availableSpace>30){
-			System.out.println("Stage 30");
-			alphaBetaPruning(new MiniMax(s,playerType,5));
-		}else if(availableSpace>25){
-			System.out.println("Stage 20");
-			alphaBetaPruning(new MiniMax(s,playerType,10));
-		}else{
-			System.out.println("End Game");
+		TestGameSystemHelper tgsHelper = new TestGameSystemHelper(s,gameClient,gamegui,playerType);
+		tgsHelper.abp(new MiniMax(s,playerType,2));
+		// int availableSpace  = s.getState('N').size();
+		// if(availableSpace> 70){
+		// 	System.out.println("Early");
+		// 	alphaBetaPruning(new MiniMax(s,playerType,2));
+		// }else if(availableSpace>45){
+		// 	System.out.println("Stage 45");
+		// 	alphaBetaPruning(new MiniMax(s,playerType,3));
+		// }else if(availableSpace>30){
+		// 	System.out.println("Stage 30");
+		// 	alphaBetaPruning(new MiniMax(s,playerType,5));
+		// }else if(availableSpace>25){
+		// 	System.out.println("Stage 20");
+		// 	alphaBetaPruning(new MiniMax(s,playerType,10));
+		// }else{
+		// 	System.out.println("End Game");
 			
-			alphaBetaPruning(new MiniMax(s,playerType,12));
-		}
+		// 	alphaBetaPruning(new MiniMax(s,playerType,12));
+		// }
 
 		// tT.timer.cancel();
 	}
