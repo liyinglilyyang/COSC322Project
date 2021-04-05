@@ -13,6 +13,21 @@ public class MiniMax {
     private char opType;
     private int level;
 
+    public Action alphaBetaSearch(){
+        int v = maxValue(suggestedMap,Integer.MIN_VALUE,Integer.MAX_VALUE,level);
+        return  findActionGivenUtility(suggestedMap,v);
+    }
+
+    public int maxValue(NewState state, int al, int be, int level){
+        if(level == 1)
+            return maxUtility(state, playerType);
+        return 0;
+    }
+
+    public boolean terminalState(NewState currentGameState, char currentPlayerType){
+        
+    }
+
     public MiniMax(NewState suggestedMap, char playerType, int level){
         this.suggestedMap = StateHelper.CopyMap(suggestedMap);
         this.playerType = playerType;
@@ -21,23 +36,23 @@ public class MiniMax {
     }
 
     public int getMax(){
-        return maxUtility(suggestedMap);
+        return maxUtility(suggestedMap, playerType);
     }
 
     public int getMaxArrow(Action bestA){
         //first, we create the map given an Aciton, which is intended to be the "best" Action
-        return maxUtility(createHypotheticalMap(suggestedMap, bestA));
+        return maxUtility(createHypotheticalMap(suggestedMap, bestA),playerType);
     }
 
-    public int maxUtility(NewState currentSuggestedMap){
+    public int maxUtility(NewState currentSuggestedMap, char currentPlayerType){
         //this is a simplified version of MiniMax
         //specifically, we only consider level = 1
         //and we don't find arrow position
         //you need to find one action which results max utility
         int maxUtility = -99;
-        StateHelper sh = new StateHelper(currentSuggestedMap, playerType);
-        for(Action a: sh.getAllActions(playerType)){
-            int hUtility = new StateHelper(createHypotheticalMap(currentSuggestedMap, a), playerType).getUtility();
+        StateHelper sh = new StateHelper(currentSuggestedMap, currentPlayerType);
+        for(Action a: sh.getAllActions(currentPlayerType)){
+            int hUtility = new StateHelper(createHypotheticalMap(currentSuggestedMap, a), currentPlayerType).getUtility();
             if (hUtility > maxUtility)
                 maxUtility = hUtility;
         }
