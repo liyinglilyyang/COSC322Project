@@ -75,8 +75,6 @@ public class MiniMax {
         return maxUtility(suggestedMap, playerType);
     }
 
-
-
     public int maxUtility(NewState currentSuggestedMap, char currentPlayerType){
         //this is a simplified version of MiniMax
         //specifically, we only consider level = 1
@@ -91,8 +89,6 @@ public class MiniMax {
         }
         return maxUtility;
     }
-
-    
 
     public NewState createHypotheticalMap(NewState Ori, Action a){
         NewState hMap = StateHelper.CopyMap(Ori);
@@ -131,12 +127,39 @@ public class MiniMax {
     }
 
     public Action findArrowWithUtility(Action bestA, int arrowUtility){
-        return findActionGivenUtility(createHypotheticalMap(suggestedMap, bestA), arrowUtility);
+        NewState hMap = createHypotheticalMap(suggestedMap, bestA);
+        StateHelper sh = new StateHelper(hMap, playerType);
+        ArrayList<Action> actionList = new ArrayList<Action>();
+        for(Action a: sh.getActions(bestA.getDe())){
+            int hUtility = new StateHelper(createHypotheticalMap(hMap, a), playerType).getUtility();
+            if (hUtility == arrowUtility)
+                actionList.add(a);
+        }
+        if(actionList.isEmpty()){
+            System.out.println("------------Warning---------------");
+            System.out.println(hMap);
+            System.out.println("------------Warning---------------");
+            System.out.println("Unexpected Case: Aciton with suggested utility of "+arrowUtility+" unfound！");
+            System.out.println("The max utility possible is: " + maxUtility(hMap,playerType));
+            return null;
+        }else{
+            System.out.println("The Size of the available action list is : "+ actionList.size());
+            return actionList.get((int)(Math.random()*actionList.size()));
+        }
+
     }
 
     public int getMaxArrow(Action bestA){
         //first, we create the map given an Aciton, which is intended to be the "best" Action
-        return maxUtility(createHypotheticalMap(suggestedMap, bestA),playerType);
+        NewState hMap = createHypotheticalMap(suggestedMap, bestA);
+        int maxUtility = -99;
+        StateHelper sh = new StateHelper(hMap, playerType);
+        for(Action a: sh.getActions(bestA.getDe())){
+            int hUtility = new StateHelper(createHypotheticalMap(hMap, a), playerType).getUtility();
+            if (hUtility > maxUtility)
+                maxUtility = hUtility;
+        }
+        return maxUtility;
     }
 
     public Action findAcitonWithUtility(int suggestedUtility){
