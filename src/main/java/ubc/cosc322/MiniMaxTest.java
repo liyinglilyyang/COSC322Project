@@ -5,7 +5,10 @@ public class MiniMaxTest {
         NewState testBoard = initializeState();
 
         MiniMax miniMax = new MiniMax(testBoard,'B',1);
-        System.out.println(miniMax.getMax());
+        int maxUtility = miniMax.getMax();
+        System.out.println("The max utility is :" + maxUtility);
+        // System.out.print();
+
     }
     public static NewState initializeState(){
         NewState testBoard = new NewState();

@@ -28,6 +28,12 @@ public class Action {
         return or;
     }
 
+    public String toString(){
+        String sentence = "";
+        sentence+="The Action is from " + or + " to " + de;
+        return sentence;
+    }
+
     // public ArrayList<Action> getActionList(){
     
     // }

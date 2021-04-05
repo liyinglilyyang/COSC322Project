@@ -28,37 +28,36 @@ public class MiniMax {
         //and we don't find arrow position
 
         //you need to find one action which results max utility
-        int max = 0;
+        int maxUtility = -99;
         StateHelper sh = new StateHelper(suggestedMap, playerType);
         for(Action a: sh.getAllActions(playerType)){
-            NewState hMap = createHypotheticalMap(suggestedMap, a);
-            StateHelper SH = new StateHelper(hMap, playerType);
-            if(SH.getUtility() > max){
-                max = SH.getUtility();
-            }
+            // //we iterate through all possible actions given current state
+            // NewState hMap = createHypotheticalMap(suggestedMap, a);
+            // //initialize a new map with the hypothentical action
+            // StateHelper hypotheticalStateHelper = new StateHelper(hMap, playerType);
+            // if(hypotheticalStateHelper.getUtility() > maxUtility){
+            //     maxUtility = hypotheticalStateHelper.getUtility();
+            // }
+            int hUtility = new StateHelper(createHypotheticalMap(suggestedMap, a), playerType).getUtility();
+            if (hUtility > maxUtility)
+                maxUtility = hUtility;
         }
-        return max;
+        return maxUtility;
     }
 
-
-    public NewState CopyMap(NewState Ori){
-        //we want to create an *identical* copy of a map
-        //but we do not want this new copy to share the same memory space (so they are different *objects*)
-		NewState hm = new NewState('N');
-		Coor[][] ori = Ori.getState();
-		for(int yi = 10; yi >=1; yi--){
-            for(int xi = 1; xi <=10; xi++){
-				hm.setCoor(ori[xi][yi]);
-            }
-        }
-		System.out.println(hm);
-		return hm;
-	}
-
     public NewState createHypotheticalMap(NewState Ori, Action a){
-        NewState hMap = CopyMap(Ori);
+        NewState hMap = StateHelper.CopyMap(Ori);
         hMap.getCoor(a.getOr()).setCoorType('N');
         hMap.getCoor(a.getDe()).setCoorType(a.getOr().getType());
+        
+        //test code bellow!~
+        System.out.println("------------");
+        System.out.println(Ori);
+        System.out.println("------------");
+        System.out.println(hMap);
+        System.out.println("------------");
+        System.out.println(a);
+        //test code bellow!~
         return hMap;
     }
 }

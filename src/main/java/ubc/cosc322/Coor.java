@@ -115,7 +115,7 @@ public class Coor {
 	
 	// print func
 	public String toString(){
-		return "The Coordinates are X: " + x +" Y: " + y + " Type: " + type;
+		return "X: " + x +" Y: " + y + " Type: " + type;
 	}
 	
 	// transToString
