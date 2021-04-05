@@ -75,10 +75,7 @@ public class MiniMax {
         return maxUtility(suggestedMap, playerType);
     }
 
-    public int getMaxArrow(Action bestA){
-        //first, we create the map given an Aciton, which is intended to be the "best" Action
-        return maxUtility(createHypotheticalMap(suggestedMap, bestA),playerType);
-    }
+
 
     public int maxUtility(NewState currentSuggestedMap, char currentPlayerType){
         //this is a simplified version of MiniMax
@@ -135,6 +132,11 @@ public class MiniMax {
 
     public Action findArrowWithUtility(Action bestA, int arrowUtility){
         return findActionGivenUtility(createHypotheticalMap(suggestedMap, bestA), arrowUtility);
+    }
+
+    public int getMaxArrow(Action bestA){
+        //first, we create the map given an Aciton, which is intended to be the "best" Action
+        return maxUtility(createHypotheticalMap(suggestedMap, bestA),playerType);
     }
 
     public Action findAcitonWithUtility(int suggestedUtility){
