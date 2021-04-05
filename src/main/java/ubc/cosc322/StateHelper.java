@@ -142,11 +142,6 @@ public class StateHelper {
 				hm.setCoor(ori[xi][yi]);
             }
         }
-		// System.out.println("The first -------------------");
-		// System.out.println(Ori);
-		
-		// System.out.println("The Second -------------------");
-		// System.out.println(hm);
 		System.out.println(hm);
 		return hm;
 	}
