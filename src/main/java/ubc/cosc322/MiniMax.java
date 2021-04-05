@@ -6,8 +6,6 @@ import java.util.*;
  * This class involves same instances as the StateHelper class doess
  * except that it needs the number of max level we look at (so that it does not consume excess amount of type)
  * 
- * 
- * 
 */
 public class MiniMax {
     public NewState suggestedMap;
