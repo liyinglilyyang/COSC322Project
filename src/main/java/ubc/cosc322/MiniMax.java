@@ -19,17 +19,49 @@ public class MiniMax {
     }
 
     public int maxValue(NewState state, int al, int be, int level){
+        System.out.println("The current level is: " + level);
         if(level == 1)
             return maxUtility(state, playerType);
-        return 0;
+        else{
+            StateHelper sh = new StateHelper(state,playerType);
+            if (sh.terminalState())
+                return sh.getUtility();
+            else{
+                int v = Integer.MIN_VALUE;
+                int newal = al;
+                for(Action a: sh.getAllActions(playerType)){
+                    NewState nextGraph =  createHypotheticalMap(state,a);
+                    v = Math.max(v, minValue(nextGraph,newal,be,level-1));
+                    if(v>=be)
+                        return v;//prunning occurs
+                    newal = Math.max(v, newal);
+                }
+                return v;
+            }
+        } 
     }
 
-    public boolean terminalState(NewState currentGameState, char currentPlayerType){
-        StateHelper currentSH = new StateHelper(currentGameState, currentPlayerType);
-        if(currentSH.getAllActions(currentPlayerType).size() == 0){
-            return true;
-        }
-        return false;
+    public int minValue(NewState state, int al, int be, int level){
+        System.out.println("The current level is: " + level);
+        if(level == 1)
+            return maxUtility(state, opType)*-1;//not sure if we want to change it
+        else{
+            StateHelper sh = new StateHelper(state,playerType);
+            if (sh.terminalState())
+                return sh.getUtility();
+            else{
+                int v = Integer.MAX_VALUE;
+                int newbe = be;
+                for(Action a: sh.getAllActions(opType)){
+                    NewState nextGraph =  createHypotheticalMap(state,a);
+                    v = Math.min(v, maxValue(nextGraph,al,newbe,level-1));
+                    if(v<=al)
+                        return v;//prunning occurs
+                    newbe = Math.min(v, newbe);
+                }
+                return v;
+            }
+        } 
     }
 
     public MiniMax(NewState suggestedMap, char playerType, int level){
@@ -62,6 +94,8 @@ public class MiniMax {
         }
         return maxUtility;
     }
+
+    
 
     public NewState createHypotheticalMap(NewState Ori, Action a){
         NewState hMap = StateHelper.CopyMap(Ori);

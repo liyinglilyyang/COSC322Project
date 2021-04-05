@@ -224,24 +224,26 @@ public class COSC322Test extends GamePlayer{
 	
 	// make emergent move
 	public void makeEmerMove(char playerType) {
-		if(s.getState('N').size()> 5){
+		if(s.getState('N').size()> 50){
 			//------------------------------
 			System.out.println("Early");
-			MiniMax miniMax = new MiniMax(s,playerType,1);
-			Action bestAction = miniMax.alphaBetaSearch();
-			Coor arrowPosition = miniMax.findArrowWithUtility(bestAction,miniMax.getMaxArrow(bestAction)).getDe();
-
-
-			updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
+			alphaBetaPruning(new MiniMax(s,playerType,1));
 			//------------------------------
 		}else{
 			System.out.println("End Game");
 			//------------------------------
-			System.out.println("Not yet implemented");
+			alphaBetaPruning(new MiniMax(s,playerType,6));
 			//------------------------------
 		}
 
 		// updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
+	}
+
+	public void alphaBetaPruning(MiniMax helper){
+		Action bestAction = helper.alphaBetaSearch();
+		System.out.println("Action is: " + bestAction + "Now we find arrow");
+		Coor arrowPosition = helper.findArrowWithUtility(bestAction,helper.getMaxArrow(bestAction)).getDe();
+		updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
 	}
 
 

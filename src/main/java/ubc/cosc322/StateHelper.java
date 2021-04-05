@@ -24,6 +24,14 @@ public class StateHelper {
         this.opType = playerType == 'B' ? 'W':'B';//we assign the opType to be different form player type
     }
 
+	public boolean terminalState(){
+        return terminalState('B') || terminalState('W');
+    }
+
+    public boolean terminalState(char currentPlayerType){
+        return getAllActions(currentPlayerType).size() == 0;
+    }
+
     public int getUtility(){
 		//this returns the current Utility
         //this should invoke getMinDistanceMap() for comparison
