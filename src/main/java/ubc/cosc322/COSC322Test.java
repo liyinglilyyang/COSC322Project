@@ -224,60 +224,22 @@ public class COSC322Test extends GamePlayer{
 	
 	// make emergent move
 	public void makeEmerMove(char playerType) {
-		
-		ArrayList<Coor> queens = s.getState(playerType);
-		// Coor queen = queens.get((int)Math.random()*4);
-
-		ArrayList<Action> allActions = new ArrayList<Action>();
-
-		System.out.println("***********The number of random actions we have is: "+ allActions.size() +"***************");
-		int i = (int)(allActions.size()*Math.random());
-		//randomlly select an action
-		Action randomAction = allActions.get(i);
-		Action mostUtilityAction;
-		if(s.getState('N').size()> 30){
+		if(s.getState('N').size()> 5){
 			//------------------------------
 			System.out.println("Early");
-			mostUtilityAction = allActions.get(0);
-			int mostUtility = getAllActions(creatHypotheticalMap(s,mostUtilityAction),playerType).size();
-			for(Action a: allActions){
-				// int currentU = findUtility(creatHypotheticalMap(s,a));
-				int currentU = getAllActions(creatHypotheticalMap(s,a),playerType).size();
-				if(currentU>mostUtility){
-					//we should update
-					mostUtilityAction = a;
-					mostUtility = currentU;
-				}
-			}
+			MiniMax miniMax = new MiniMax(s,playerType,1);
+			Action bestAction = miniMax.findAcitonWithUtility(miniMax.getMax());
+			Coor arrowPosition = miniMax.findArrowWithUtility(bestAction,miniMax.getMaxArrow(bestAction)).getDe();
+			updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
 			//------------------------------
 		}else{
 			System.out.println("End Game");
 			//------------------------------
-			mostUtilityAction = allActions.get(0);
-			// int mostUtility = findUtility(creatHypotheticalMap(s,mostUtilityAction));
-			int mostUtility = findUtility(creatHypotheticalMap(s,mostUtilityAction));
-			for(Action a: allActions){
-				int currentU = findUtility(creatHypotheticalMap(s,a));
-				if(currentU>mostUtility){
-					//we should update
-					mostUtilityAction = a;
-					mostUtility = currentU;
-				}
-			}
+			System.out.println("Not yet implemented");
 			//------------------------------
 		}
-		Action decide = mostUtilityAction;	
-		
-		//we have already decided the action, namely the ori and de coordinates
-		//now we are looking at merely the new arrow position
-		ArrayList<Action> ArrowP = getActions(creatHypotheticalMap(s, decide), decide.getDe());
-		if(ArrowP.size()==0){
-			System.out.println("********************_____________________***************************");
-			System.out.println(decide.getOr());
-			System.out.println(decide.getDe());
-		}
-		int j = (int)(ArrowP.size()*Math.random());
-		updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
+
+		// updateAction(decide.getOr(), decide.getDe(), ArrowP.get(j).getDe());
 	}
 
 
