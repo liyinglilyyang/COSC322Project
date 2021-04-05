@@ -228,8 +228,10 @@ public class COSC322Test extends GamePlayer{
 			//------------------------------
 			System.out.println("Early");
 			MiniMax miniMax = new MiniMax(s,playerType,1);
-			Action bestAction = miniMax.findAcitonWithUtility(miniMax.getMax());
+			Action bestAction = miniMax.alphaBetaSearch();
 			Coor arrowPosition = miniMax.findArrowWithUtility(bestAction,miniMax.getMaxArrow(bestAction)).getDe();
+
+
 			updateAction(bestAction.getOr(), bestAction.getDe(), arrowPosition);
 			//------------------------------
 		}else{
