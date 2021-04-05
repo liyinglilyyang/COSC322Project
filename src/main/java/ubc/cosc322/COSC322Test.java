@@ -157,13 +157,18 @@ public class COSC322Test extends GamePlayer{
 			System.out.println(New_Position);
 			System.out.println(Arrow_Position);
 			ErrorChecker ec = new ErrorChecker(Ori_Position, New_Position, Arrow_Position);
-			ec.updateValid();
-    		// update state and arrowboard
-    		this.s.updateState(Ori_Position, New_Position);
-    		this.s.setCoor(Arrow_Position);
-			makeMove(playerType);
-    		long endTime=System.currentTimeMillis();
-        	System.out.println("Run time: "+(endTime-startTime)+"ms-----------------------------------------------");
+			if(ec.updateValid()){
+				// update state and arrowboard
+				this.s.updateState(Ori_Position, New_Position);
+				this.s.setCoor(Arrow_Position);
+				makeMove(playerType);
+				long endTime=System.currentTimeMillis();
+				System.out.println("Run time: "+(endTime-startTime)+"ms-----------------------------------------------");
+			}else{
+				System.out.println("We win.");
+			}
+				
+			
     	}
     	
     	return true;   	
