@@ -7,6 +7,7 @@ public class MiniMaxTest {
         MiniMax miniMax = new MiniMax(testBoard,'B',1);
         int maxUtility = miniMax.getMax();
         System.out.println("The max utility is :" + maxUtility);
+        System.out.println("The action with Max Utility is: \n" + miniMax.findAcitonWithUtility(maxUtility));
         // System.out.print();
 
     }

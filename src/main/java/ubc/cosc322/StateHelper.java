@@ -73,7 +73,7 @@ public class StateHelper {
 
 		ArrayList<Coor> queens = suggestedMap.getState(targetType);
 		calMinDistance(mdMap, queens, 1);
-		printMatrix(mdMap);
+		// printMatrix(mdMap);
         return mdMap;
     }
 
@@ -142,7 +142,7 @@ public class StateHelper {
 				hm.setCoor(ori[xi][yi]);
             }
         }
-		System.out.println(hm);
+		// System.out.println(hm);
 		return hm;
 	}
 

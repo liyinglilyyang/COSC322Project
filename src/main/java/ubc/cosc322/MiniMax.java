@@ -1,6 +1,6 @@
 package ubc.cosc322;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * This class involves same instances as the StateHelper class doess
@@ -45,19 +45,48 @@ public class MiniMax {
         return maxUtility;
     }
 
+    public int getMaxArrow(Action a){
+        
+        return 0;
+    }
+
     public NewState createHypotheticalMap(NewState Ori, Action a){
         NewState hMap = StateHelper.CopyMap(Ori);
         hMap.getCoor(a.getOr()).setCoorType('N');
         hMap.getCoor(a.getDe()).setCoorType(a.getOr().getType());
         
         //test code bellow!~
-        System.out.println("------------");
-        System.out.println(Ori);
-        System.out.println("------------");
-        System.out.println(hMap);
-        System.out.println("------------");
-        System.out.println(a);
-        //test code bellow!~
+        // System.out.println("------------");
+        // System.out.println(Ori);
+        // System.out.println("------------");
+        // System.out.println(hMap);
+        // System.out.println("------------");
+        // System.out.println(a);
+        //test code above!~
         return hMap;
     }
+
+    public NewState createHypotheticalMap(NewState Ori, Coor arrow){
+        NewState hMap = StateHelper.CopyMap(Ori);
+
+        return hMap;
+    }
+
+    public Action findAcitonWithUtility(int suggestedUtility){
+        StateHelper sh = new StateHelper(suggestedMap, playerType);
+        ArrayList<Action> actionList = new ArrayList<Action>();
+        for(Action a: sh.getAllActions(playerType)){
+            int hUtility = new StateHelper(createHypotheticalMap(suggestedMap, a), playerType).getUtility();
+            if (hUtility == suggestedUtility)
+                actionList.add(a);
+        }
+        if(actionList.isEmpty()){
+            System.out.println("Unexpected Case: Aciton with suggested utility unfound！");
+            return null;
+        }else{
+            System.out.println("The Size of the available action list is : "+ actionList.size());
+            return actionList.get((int)(Math.random()*actionList.size()));
+        }
+    }
+
 }
