@@ -55,7 +55,7 @@ public class COSC322Test extends GamePlayer{
      * @param args for name and passwd (current, any string would work)
      */
     public static void main(String[] args) {				 
-    	COSC322Test player = new COSC322Test("IRIDIX", "TestSP");
+    	COSC322Test player = new COSC322Test("ame", "ame");
     	//team09Player player = new team09Player(args[0], args[1]);
     	//HumanPlayer player = new HumanPlayer();
     	
@@ -140,7 +140,7 @@ public class COSC322Test extends GamePlayer{
     	}else if (messageType.equals(AmazonsGameMessage.GAME_ACTION_MOVE)){
     		// this.gamegui.updateGameState(msgDetails);
     		ArrayList <Integer> QueenOri = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_CURR));
-    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.QUEEN_POS_NEXT));
+    		ArrayList <Integer> QueenNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.Queen_POS_NEXT));
     		ArrayList <Integer> arrowNew = (ArrayList <Integer>) msgDetails.get((AmazonsGameMessage.ARROW_POS));
     		gamegui.updateGameState(QueenOri,QueenNew,arrowNew);
 			//newly added 
@@ -217,26 +217,24 @@ public class COSC322Test extends GamePlayer{
 
 		// makeAction();
 		// makeEmerMove(playerType);
-		TestGameSystemHelper tgsHelper = new TestGameSystemHelper(s,gameClient,gamegui,playerType);
-		tgsHelper.abp(new MiniMax(s,playerType,2));
-		// int availableSpace  = s.getState('N').size();
-		// if(availableSpace> 70){
-		// 	System.out.println("Early");
-		// 	alphaBetaPruning(new MiniMax(s,playerType,2));
-		// }else if(availableSpace>45){
-		// 	System.out.println("Stage 45");
-		// 	alphaBetaPruning(new MiniMax(s,playerType,3));
-		// }else if(availableSpace>30){
-		// 	System.out.println("Stage 30");
-		// 	alphaBetaPruning(new MiniMax(s,playerType,5));
-		// }else if(availableSpace>25){
-		// 	System.out.println("Stage 20");
-		// 	alphaBetaPruning(new MiniMax(s,playerType,10));
-		// }else{
-		// 	System.out.println("End Game");
-			
-		// 	alphaBetaPruning(new MiniMax(s,playerType,12));
-		// }
+
+		int availableSpace  = s.getState('N').size();
+		if(availableSpace> 70){
+			System.out.println("Early");
+			alphaBetaPruning(new MiniMax(s,playerType,2));
+		}else if(availableSpace>45){
+			System.out.println("Stage 45");
+			alphaBetaPruning(new MiniMax(s,playerType,3));
+		}else if(availableSpace>30){
+			System.out.println("Stage 30");
+			alphaBetaPruning(new MiniMax(s,playerType,4));
+		}else if(availableSpace>25){
+			System.out.println("Stage 20");
+			alphaBetaPruning(new MiniMax(s,playerType,10));
+		}else{
+			System.out.println("End Game");
+			alphaBetaPruning(new MiniMax(s,playerType,12));
+		}
 
 		// tT.timer.cancel();
 	}
