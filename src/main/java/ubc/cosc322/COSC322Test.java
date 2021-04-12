@@ -55,7 +55,7 @@ public class COSC322Test extends GamePlayer{
      * @param args for name and passwd (current, any string would work)
      */
     public static void main(String[] args) {				 
-    	COSC322Test player = new COSC322Test("ame", "ame");
+    	COSC322Test player = new COSC322Test("team09", "team09");
     	//team09Player player = new team09Player(args[0], args[1]);
     	//HumanPlayer player = new HumanPlayer();
     	
@@ -154,6 +154,17 @@ public class COSC322Test extends GamePlayer{
     		System.out.println(Ori_Position);
 			System.out.println(New_Position);
 			System.out.println(Arrow_Position);
+			ErrorChecker ec = new ErrorChecker(Ori_Position, New_Position, Arrow_Position);
+			if(ec.updateValid()){
+				// update state and arrowboard
+				this.s.updateState(Ori_Position, New_Position);
+				this.s.setCoor(Arrow_Position);
+				makeMove(playerType);
+				long endTime=System.currentTimeMillis();
+				System.out.println("Run time: "+(endTime-startTime)+"ms-----------------------------------------------");
+			}else{
+				System.out.println("We win.");
+			}
     	}
     	
     	return true;   	
@@ -217,7 +228,7 @@ public class COSC322Test extends GamePlayer{
 		}else if(availableSpace>30){
 			System.out.println("Stage 30");
 			alphaBetaPruning(new MiniMax(s,playerType,4));
-		}else if(availableSpace>25){
+		}else if(availableSpace>20){
 			System.out.println("Stage 20");
 			alphaBetaPruning(new MiniMax(s,playerType,10));
 		}else{
